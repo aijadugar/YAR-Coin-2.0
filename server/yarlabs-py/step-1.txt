@@ -1,0 +1,146 @@
+## **YAR-Coin Public Deployment Workflow **
+
+### **1️⃣ Smart Contract Development**
+
+* Create `YARCoin.sol` (ERC20 token contract).
+* Define:
+
+  * Total supply
+  * Transfer function
+  * Optional mint/burn functions
+
+**Tools:** Solidity, VS Code
+
+---
+
+### **2️⃣ Choose the Blockchain Network**
+
+* **Testnet **
+
+  * Sepolia for Ethereum
+  * Free test ETH from faucets
+
+* **Mainnet **
+
+  * Requires real ETH for gas fees
+
+**Reason:** Testnets mimic mainnet behavior **without spending real money**.
+
+---
+
+### **3️⃣ Environment Setup**
+
+* Create `.env` to store **sensitive info**:
+
+```
+RPC_URL=<Infura/Alchemy URL for network>
+PRIVATE_KEY=<Your Wallet Private Key>
+WALLET_ADDRESS=<Your Wallet Address>
+```
+
+* **RPC_URL**: Endpoint to connect to network (Infura, Alchemy, QuickNode, etc.)
+* **PRIVATE_KEY**: Wallet that will pay gas fees
+* **WALLET_ADDRESS**: Corresponding public address
+
+---
+
+### **4️⃣ Compile Smart Contract**
+
+* Use `py-solc-x` in Python or `solc`/Hardhat in JS to compile `.sol` file.
+* Outputs **ABI** and **bytecode**.
+
+---
+
+### **5️⃣ Deploy Contract Using Python**
+
+* Connect to network with Web3.py:
+
+```python
+w3 = Web3(Web3.HTTPProvider(RPC_URL))
+```
+
+* Build deployment transaction:
+
+```python
+tx = contract.constructor().build_transaction({
+    "from": MY_ADDRESS,
+    "nonce": w3.eth.get_transaction_count(MY_ADDRESS),
+    "gas": 3_000_000,
+    "gasPrice": w3.to_wei('10', 'gwei'),
+    "chainId": 11155111  # Sepolia
+})
+```
+
+* Sign transaction with **private key**
+* Send transaction with `w3.eth.send_raw_transaction()`
+* Wait for receipt to get **contract address**
+
+**Tip:** For mainnet, adjust `gasPrice` according to network conditions.
+
+---
+
+### **6️⃣ Fund Your Wallet (Testnet)**
+
+* Testnets require **free test ETH**:
+
+  * Sepolia Faucet: [https://sepoliafaucet.com/](https://sepoliafaucet.com/)
+  * Goerli Faucet: [https://faucet.goerli.mudit.blog/](https://faucet.goerli.mudit.blog/)
+* Mainnet requires real ETH to pay gas fees.
+
+---
+
+### **7️⃣ Interact with Deployed Contract**
+
+* Python script `interact_yarcoin.py`:
+
+  * Check balances (`balanceOf`)
+  * Transfer tokens (`transfer`)
+  * Approve and allowance (optional)
+* Use **contract ABI** and **deployed address**.
+
+---
+
+### **8️⃣ Record Deployment & Transactions**
+
+* **Transaction hash**: Proof of deployment
+* **Contract address**: Reference for users and backend
+* Use **Etherscan** to verify contract and transactions
+
+Example (Sepolia):
+
+```
+TX Hash: 0xabc123...
+Contract: 0xdef456...
+```
+
+---
+
+### **9️⃣ Optional: Frontend Integration**
+
+* Connect frontend (React, Vue, etc.) with **Web3.js or Ethers.js**
+* Display:
+
+  * Token balances
+  * Transaction history
+  * Transfer interface
+
+---
+
+### **10️⃣ Workflow Diagram for Research Paper**
+
+```
+[YARCoin.sol] --> [Compile] --> [Python Script]
+        |
+        v
+[Public Ethereum Network (Sepolia)]
+        |
+        v
+[Transaction Confirmed] --> [Contract Address]
+        |
+        v
+[Python/Frontend Interaction]
+        |
+        v
+[Balance Check / Transfer Tokens / Demo Project]
+```
+
