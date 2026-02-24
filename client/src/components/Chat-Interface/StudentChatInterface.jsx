@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./StudentChatInterface.css";
+import socket from "./socket";
 
 function StudentChatInterface() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [messages, setMessages] = useState([
-    { text: "Welcome to Team Workspace", sender: "mentor" },
-    { text: "hii", sender: "student" }
-  ]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [teamMembers, setTeamMembers] = useState([]);
+  const [user, setUser] = useState(null);
 
-  // Temporary Dummy Data (remove when backend ready)
+  // Dummy team data
   const dummyTeam = {
     mentor: { name: "Raunak Joshi" },
     students: [
@@ -19,26 +18,8 @@ function StudentChatInterface() {
     ]
   };
 
+  // Load team members
   useEffect(() => {
-    // When backend comes, replace this with real fetch()
-
-    /*
-    const fetchTeamMembers = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/team-members/TEAM_ID");
-        const data = await res.json();
-        setTeamMembers([
-          { name: data.mentor.name, role: "Mentor" },
-          ...data.students.map(s => ({ name: s.name, role: "Student" }))
-        ]);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchTeamMembers();
-    */
-
-    // 🔥 For now using dummy data
     setTeamMembers([
       { name: dummyTeam.mentor.name, role: "Mentor" },
       ...dummyTeam.students.map(s => ({
@@ -46,13 +27,79 @@ function StudentChatInterface() {
         role: "Candidate"
       }))
     ]);
-
   }, []);
 
-  const handleSend = () => {
-    if (input.trim() === "") return;
+  // Set student user (TEMP TESTING ONLY)
+  useEffect(() => {
+    setUser({
+      _id: "6996b9c8d3efbe3c0cd891ae",
+      role: "member"
+    });
+  }, []);
 
-    setMessages([...messages, { text: input, sender: "student" }]);
+  // Socket logic
+  useEffect(() => {
+    if (!user) return;
+
+    // Join room
+    socket.emit("joinRoom", {
+      userId: user._id,
+      role: user.role
+    });
+
+    // Load old messages
+    socket.on("previousMessages", (msgs) => {
+      const formatted = msgs.map(msg => ({
+        text: msg.message,
+        sender: msg.senderRole === "admin" ? "mentor" : "student",
+        _id: msg._id,
+        timestamp: msg.createdAt
+      }));
+
+      setMessages(formatted);
+    });
+
+    // Receive new message
+    socket.on("receiveMessage", (msg) => {
+      const newMsg = {
+        text: msg.message,
+        sender: msg.senderRole === "admin" ? "mentor" : "student",
+        _id: msg._id,
+        timestamp: msg.createdAt
+      };
+
+      setMessages(prev => [...prev, newMsg]);
+    });
+
+    // Debugging listeners
+    socket.on("connect", () => {
+      console.log("Student socket connected");
+    });
+
+    socket.on("disconnect", (reason) => {
+      console.log("Student socket disconnected:", reason);
+    });
+
+    // Cleanup
+    return () => {
+      socket.off("previousMessages");
+      socket.off("receiveMessage");
+      socket.off("connect");
+      socket.off("disconnect");
+    };
+
+  }, [user]);
+
+  // Send message
+  const handleSend = () => {
+    if (!input.trim() || !user) return;
+
+    socket.emit("sendMessage", {
+      userId: user._id,
+      role: user.role,
+      message: input
+    });
+
     setInput("");
   };
 
@@ -79,10 +126,8 @@ function StudentChatInterface() {
       </div>
 
       {/* Chat Section */}
-      <div
-        className="chat-container"
+      <div className="chat-container">
 
-      >
         <div className="chat-header">
           {!isSidebarOpen && (
             <button
@@ -93,19 +138,35 @@ function StudentChatInterface() {
             </button>
           )}
           <h2>Team Workspace</h2>
+
+          {!socket.connected && (
+            <span style={{ color: "red", marginLeft: "10px" }}>
+              (Disconnected)
+            </span>
+          )}
         </div>
 
         <div className="chat-messages">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`message ${
-                msg.sender === "student" ? "right" : "left"
-              }`}
-            >
-              {msg.text}
-            </div>
-          ))}
+          {messages.length === 0 ? (
+            <p style={{ textAlign: "center" }}>No messages yet</p>
+          ) : (
+            messages.map((msg) => (
+              <div
+                key={msg._id}
+                className={`message ${
+                  msg.sender === "student" ? "right" : "left"
+                }`}
+              >
+                <div>{msg.text}</div>
+
+                {msg.timestamp && (
+                  <small style={{ opacity: 0.6 }}>
+                    {new Date(msg.timestamp).toLocaleTimeString()}
+                  </small>
+                )}
+              </div>
+            ))
+          )}
         </div>
 
         <div className="chat-input-section">
@@ -113,11 +174,18 @@ function StudentChatInterface() {
             type="text"
             placeholder="Type a message..."
             value={input}
+            disabled={!socket.connected}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
-          <button onClick={handleSend}>Send</button>
+          <button
+            onClick={handleSend}
+            disabled={!socket.connected || !input.trim()}
+          >
+            Send
+          </button>
         </div>
+
       </div>
     </div>
   );

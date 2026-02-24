@@ -1,25 +1,92 @@
 import React, { useState, useEffect } from "react";
 import "./TeacherChatInterface.css";
+import socket from "./socket"; // Import the socket instance
 
 function TeacherChatInterface() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [messages, setMessages] = useState([
-    { text: "Welcome to Team Workspace", sender: "teacher" },
-    { text: "hii", sender: "student" }
-  ]);
+  const [messages, setMessages] = useState([]); // Start with empty array, will be populated from socket
   const [input, setInput] = useState("");
   const [students, setStudents] = useState([]);
   const [expandedStudents, setExpandedStudents] = useState({});
+  const [user, setUser] = useState(null); // User state for socket connection
 
   // Temporary Dummy Data (remove when backend ready)
   const dummyTeam = {
-    mentor: { name: "Raunak Joshi" },
+    mentor: { name: "Raunak Joshi", _id: "mentor1" },
     students: [
-      { name: "Ankit Bari", githubUsername: "ankitbari" },
-      { name: "Yash Kerkar", githubUsername: "yashkerkar" }
+      { name: "Ankit Bari", _id: "student1", githubUsername: "ankitbari" },
+      { name: "Yash Kerkar", _id: "student2", githubUsername: "yashkerkar" }
     ]
   };
 
+  // Initialize user (teacher/mentor)
+  useEffect(() => {
+    // In a real app, this would come from your authentication context
+    // For now, we'll assume the teacher is logged in
+    setUser({
+      _id: "6996ba04d3efbe3c0cd891b4", // This should be the actual teacher/mentor ID
+      role: "admin" // or "mentor" based on your backend role naming
+    });
+  }, []);
+
+  // Socket connection and message handling
+  useEffect(() => {
+    if (!user) return;
+
+    // Join room
+    socket.emit("joinRoom", {
+      userId: user._id,
+      role: user.role
+    });
+
+    // Load old messages
+    socket.on("previousMessages", (msgs) => {
+      // Transform messages to match your frontend format
+      const formattedMessages = msgs.map(msg => ({
+        text: msg.message,
+        sender: msg.senderRole === "admin" || msg.senderRole === "mentor" ? "teacher" : "student",
+        _id: msg._id,
+        timestamp: msg.createdAt
+      }));
+      setMessages(formattedMessages);
+    });
+
+    // Receive new message
+    socket.on("receiveMessage", (msg) => {
+      const newMessage = {
+        text: msg.message,
+        sender: msg.senderRole === "admin" || msg.senderRole === "mentor" ? "teacher" : "student",
+        _id: msg._id,
+        timestamp: msg.createdAt
+      };
+      setMessages(prev => [...prev, newMessage]);
+    });
+
+    // Socket connection events for debugging
+    socket.on("connect", () => {
+      console.log("Socket connected successfully");
+    });
+
+    socket.on("connect_error", (error) => {
+      console.error("Socket connection error:", error);
+    });
+
+    socket.on("disconnect", (reason) => {
+      console.log("Socket disconnected:", reason);
+    });
+
+    // Cleanup on unmount
+    return () => {
+      socket.off("previousMessages");
+      socket.off("receiveMessage");
+      socket.off("connect");
+      socket.off("connect_error");
+      socket.off("disconnect");
+    };
+
+  }, [user]);
+
+  // Fetch students (keeping your existing dummy data logic)
   useEffect(() => {
     // When backend comes, replace this with real fetch()
     /*
@@ -29,7 +96,8 @@ function TeacherChatInterface() {
         const data = await res.json();
         setStudents(data.students.map(s => ({ 
           name: s.name, 
-          githubUsername: s.githubUsername 
+          githubUsername: s.githubUsername,
+          _id: s._id 
         })));
       } catch (err) {
         console.error(err);
@@ -41,7 +109,8 @@ function TeacherChatInterface() {
     // 🔥 For now using dummy data
     setStudents(dummyTeam.students.map(s => ({
       name: s.name,
-      githubUsername: s.githubUsername
+      githubUsername: s.githubUsername,
+      _id: s._id
     })));
 
     // Initialize all students as collapsed
@@ -61,10 +130,24 @@ function TeacherChatInterface() {
   };
 
   const handleSend = () => {
-    if (input.trim() === "") return;
+    if (input.trim() === "" || !user) return;
 
-    setMessages([...messages, { text: input, sender: "teacher" }]);
+    // Send message through socket
+    socket.emit("sendMessage", {
+      userId: user._id,
+      role: user.role,
+      message: input
+    });
+
     setInput("");
+  };
+
+  // Handle Enter key press
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
   };
 
   return (
@@ -83,7 +166,7 @@ function TeacherChatInterface() {
         </div>
 
         {students.map((student, index) => (
-          <div key={index} className="student-container">
+          <div key={student._id || index} className="student-container">
             <div 
               className="student-header"
               onClick={() => toggleStudent(index)}
@@ -100,7 +183,7 @@ function TeacherChatInterface() {
                   {/* GitHub contribution graph will be loaded here */}
                   <div className="graph-content">
                     <p className="graph-placeholder-text">
-                      GitHub Contribution Graph 
+                      GitHub Contribution Graph for {student.githubUsername}
                     </p>
                     {/* The actual graph will be inserted here via iframe or embed */}
                   </div>
@@ -125,19 +208,33 @@ function TeacherChatInterface() {
             </button>
           )}
           <h2>Team Workspace - Teacher View</h2>
+          {!socket.connected && (
+            <span className="connection-status disconnected">(Disconnected)</span>
+          )}
         </div>
 
         <div className="chat-messages">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`message ${
-                msg.sender === "teacher" ? "right" : "left"
-              }`}
-            >
-              {msg.text}
+          {messages.length === 0 ? (
+            <div className="no-messages">
+              <p>No messages yet. Start the conversation!</p>
             </div>
-          ))}
+          ) : (
+            messages.map((msg, index) => (
+              <div
+                key={msg._id || index}
+                className={`message ${
+                  msg.sender === "teacher" ? "right" : "left"
+                }`}
+              >
+                <div className="message-content">{msg.text}</div>
+                {msg.timestamp && (
+                  <div className="message-timestamp">
+                    {new Date(msg.timestamp).toLocaleTimeString()}
+                  </div>
+                )}
+              </div>
+            ))
+          )}
         </div>
 
         <div className="chat-input-section">
@@ -146,9 +243,15 @@ function TeacherChatInterface() {
             placeholder="Type a message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onKeyDown={handleKeyPress}
+            disabled={!socket.connected}
           />
-          <button onClick={handleSend}>Send</button>
+          <button 
+            onClick={handleSend}
+            disabled={!socket.connected || !input.trim()}
+          >
+            Send
+          </button>
         </div>
       </div>
     </div>

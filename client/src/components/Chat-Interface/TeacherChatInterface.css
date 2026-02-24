@@ -291,6 +291,124 @@
   animation: slideDown 0.3s ease;
 }
 
+/* Add these styles to your existing TeacherChatInterface.css */
+
+/* Connection status */
+.connection-status {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-left: 10px;
+}
+
+.connection-status.disconnected {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff6b6b;
+}
+
+.connection-status.connected {
+  background: rgba(0, 255, 0, 0.2);
+  color: #6bff6b;
+}
+
+/* No messages placeholder */
+.no-messages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+/* Message timestamp */
+.message-timestamp {
+  font-size: 10px;
+  margin-top: 4px;
+  opacity: 0.7;
+  text-align: right;
+}
+
+.message.left .message-timestamp {
+  color: #666;
+}
+
+.message.right .message-timestamp {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Disabled input and button states */
+.chat-input-section input:disabled,
+.chat-input-section button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chat-input-section button:disabled:hover {
+  background: #1e90ff;
+  transform: none;
+}
+
+/* Improved message content */
+.message-content {
+  word-wrap: break-word;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error Container */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(to right, #203a43, #2c5364);
+  color: white;
+}
+
+.error-message {
+  background: rgba(255, 0, 0, 0.2);
+  padding: 15px 30px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+}
+
+.retry-btn {
+  padding: 10px 20px;
+  background: #1e90ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.retry-btn:hover {
+  background: #0d6efd;
+}
+
+/* No Students */
+.no-students {
+  padding: 20px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+/* User Info */
+.user-info {
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-left: 10px;
+  color: #1e90ff;
+}
+
 @keyframes slideDown {
   from {
     opacity: 0;
