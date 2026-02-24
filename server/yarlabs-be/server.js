@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const cron = require('node-cron');
+const http = require('http');
+const {Server} = require('socket.io');
 const dotenv = require('dotenv');
 dotenv.config();
 const studentRoutes = require('./routes/studentRoutes');
@@ -9,9 +11,13 @@ const Student = require('./models/Student');
 const teacherRoutes = require('./routes/teacherRoutes');
 const Teacher = require('./models/Teacher');
 const biddingRoutes = require('./routes/biddingRoutes');
+const Bidding = require('./models/Bidding')
 const DEX = require('./models/DEX');
+const Message = require('./models/Message');
+const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();
+const server = http.createServer(app);
 // ngrok config add-authtoken <YOUR_AUTH_TOKEN>
 // ngrok http 5000
 
@@ -48,10 +54,18 @@ app.use(express.json());
 app.use('/api/students', studentRoutes);
 app.use('/api/teachers', teacherRoutes);
 app.use('/api/biddings', biddingRoutes);
+app.use('/dashboard', dashboardRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected!'))
     .catch((err) => console.log(err));
+
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
 
 app.post('/login', async (req, res) => {
     try {
@@ -115,9 +129,22 @@ app.post('/convert', async (req, res) => {
             usdBalance: usdValue
         });
 
+        const total = await DEX.aggregate([
+            { $match: { walletAddress } },
+            { 
+                $group: { 
+                    _id: null, 
+                    totalUsd: { $sum: "$usdBalance" } 
+                } 
+            }
+        ]);
+
+        const totalUsd = total.length > 0 ? total[0].totalUsd : 0;
+
         res.json({
             success: true,
             convertedUsd: usdValue,
+            totalUsd: totalUsd
         });
 
     } catch (error) {
@@ -158,6 +185,72 @@ app.get('/transactions/:walletAddress', async (req, res) => {
     }
 });
 
+io.on("connection", (socket) => {
+    console.log("User connected:", socket.id);
+    socket.on("joinRoom", async ({ userId, role }) => {
+        try {
+            let adminId;
+
+            if (role === "admin") {
+                adminId = userId;
+            } else {
+                const student = await Student.findById(userId);
+                if (!student || !student.ownedBy) return;
+
+                adminId = student.ownedBy;
+            }
+
+            const roomId = `admin_${adminId}`;
+
+            socket.join(roomId);
+
+            const previousMessages = await Message
+                .find({ roomId })
+                .sort({ timestamp: 1 });
+
+            socket.emit("previousMessages", previousMessages);
+
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+
+    socket.on("sendMessage", async ({ userId, role, message }) => {
+        try {
+            let adminId;
+
+            if (role === "admin") {
+                adminId = userId;
+            } else {
+                const student = await Student.findById(userId);
+                if (!student || !student.ownedBy) return;
+
+                adminId = student.ownedBy;
+            }
+
+            const roomId = `admin_${adminId}`;
+
+            const newMessage = await Message.create({
+                roomId,
+                senderId: userId,
+                senderRole: role,
+                message
+            });
+
+            io.to(roomId).emit("receiveMessage", newMessage);
+
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+    socket.on("disconnect", () => {
+        console.log("User disconnected:", socket.id);
+    });
+
+});
+
 // cron.schedule('* * * * *', async () => {
 //     console.log("Running auction settlements...");
 //     const students = await Student.find({ ownedBy: null });
@@ -180,6 +273,6 @@ app.get('/transactions/:walletAddress', async (req, res) => {
 //     console.log("Finished auction settlements...");
 // });
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`)
 });
