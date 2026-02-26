@@ -31,6 +31,9 @@ Router.post("/panelty", async (req, res) => {
         if (!student || !teacher) {
             return res.status(404).json({ message: "Admin and Member not found" });
         }
+        if (student.yarBalance < parseInt(amount)) {
+            return res.status(400).json({ message: "There is no sufficient YARC's on member's balance" })
+        }
 
         student.yarBalance -= parseInt(amount);
         teacher.purse += parseInt(amount);
