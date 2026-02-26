@@ -101,7 +101,7 @@ export default function TeacherNavbar({
                 </button>
 
                 <button className="penalty-btn">
-                    <Link to="/">
+                    <Link to="/penalty">
                       Penalty
                     </Link>
                 </button>

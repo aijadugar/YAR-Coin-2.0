@@ -20,7 +20,7 @@ export default function Dex() {
 
       try {
         const response = await fetch(
-          `https://supreme-space-funicular-wr7vr55qgw5jfgjww-5000.app.github.dev/transactions/${walletAddress}`
+          `https://fictional-journey-9796755g5qgwc7gwg-5000.app.github.dev/transactions/${walletAddress}`
         );
 
         const data = await response.json();
@@ -50,7 +50,7 @@ export default function Dex() {
       setLoading(true);
 
       const response = await fetch(
-        "https://supreme-space-funicular-wr7vr55qgw5jfgjww-5000.app.github.dev/convert",
+        "https://fictional-journey-9796755g5qgwc7gwg-5000.app.github.dev/convert",
         {
           method: "POST",
           headers: {
@@ -65,12 +65,14 @@ export default function Dex() {
 
       const data = await response.json();
 
+      console.log("Backend response:", data);
+
       if (data.success) {
         setCurrentUsd(data.convertedUsd || 0);
         setTotalUsd(data.totalUsd || 0);
         setYarcAmount("");
       } else {
-        alert("Conversion failed");
+        alert(data.message || "Conversion failed");
       }
 
     } catch (error) {

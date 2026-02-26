@@ -145,18 +145,40 @@ body {
   transition: all 0.3s ease;
 }
 
-.dashboard-btn {
-  width: 100%;
-  margin-top: 1.2rem;
-  background: linear-gradient(135deg, #f6de07, #c0392b);
-  border: none;
-  padding: 0.75rem;
+button.dashboard-btn,
+button.dex-btn {
+  width: 48%;
+  padding: 0.65rem;
   border-radius: 10px;
-  text-decoration: none;
-  color: white;
-  font-weight: 600;
+  border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  margin-top: 0.8rem;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+/* Yellow Button */
+button.dashboard-btn {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #1f2937;
+}
+
+/* Blue Button */
+button.dex-btn {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  margin-left:10px;
+}
+
+button.dex-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(99,102,241,0.3);
+}
+
+.dex-btn a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
 .dropdown-logout-btn:hover {

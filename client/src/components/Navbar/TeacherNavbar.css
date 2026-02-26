@@ -135,7 +135,7 @@
 }
 
 button.dashboard-btn,
-button.dex-btn {
+button.penalty-btn {
   width: 48%;
   padding: 0.65rem;
   border-radius: 10px;
@@ -153,7 +153,7 @@ button.dashboard-btn {
 }
 
 /* Blue Button */
-button.dex-btn {
+button.penalty-btn {
   background: linear-gradient(135deg, #6366f1, #4f46e5);
   color: white;
   margin-left:10px;
@@ -165,13 +165,13 @@ button.dashboard-btn:hover {
   box-shadow: 0 8px 15px rgba(251,191,36,0.3);
 }
 
-button.dex-btn:hover {
+button.penalty-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 15px rgba(99,102,241,0.3);
 }
 
 .dashboard-btn a,
-.dex-btn a {
+.penalty-btn a {
   text-decoration: none;
   color: inherit;
   display: block;

@@ -6,6 +6,7 @@ import Playground from "./components/Student-Dashboard/Playground";
 import StudentChatInterface from "./components/Chat-Interface/StudentChatInterface";
 import TeacherChatInterface from "./components/Chat-Interface/TeacherChatInterface";
 import Dex from "./components/DEX/Dex";
+import Penalty from "./components/Penalty/PenaltyPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/student-workspace" element={<StudentChatInterface />} />
         <Route path="/teacher-workspace" element={<TeacherChatInterface />} />
         <Route path="/dexes" element={<Dex />} />
+        <Route path="/penalty" element={<Penalty/>}/>
       </Routes>
     </Router>
   );
