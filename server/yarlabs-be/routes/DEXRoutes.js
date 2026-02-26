@@ -10,26 +10,17 @@ Router.post('/convert', async (req, res) => {
         const amount = Number(yarAmount);
 
         if (!walletAddress || isNaN(amount) || amount <= 0) {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid wallet or YAR amount"
-            });
+            return res.status(400).json({ success: false, message: "Invalid wallet or YAR amount" });
         }
 
         const student = await Student.findOne({ walletAddress });
 
         if (!student) {
-            return res.status(404).json({
-                success: false,
-                message: "Student not found"
-            });
+            return res.status(404).json({ success: false, message: "Student not found" });
         }
 
         if (student.yarBalance < amount) {
-            return res.status(400).json({
-                success: false,
-                message: "Insufficient YAR balance"
-            });
+            return res.status(400).json({ success: false, message: "Insufficient YAR balance" });
         }
 
         const conversionRate = 0.5;
@@ -40,11 +31,11 @@ Router.post('/convert', async (req, res) => {
 
         const total = await DEX.aggregate([
             { $match: { walletAddress } },
-            { 
-                $group: { 
-                    _id: null, 
-                    totalUsd: { $sum: "$usdBalance" } 
-                } 
+            {
+                $group: {
+                    _id: null,
+                    totalUsd: { $sum: "$usdBalance" }
+                }
             }
         ]);
 
@@ -58,18 +49,11 @@ Router.post('/convert', async (req, res) => {
             totalUsd: newTotalUsd
         });
 
-        res.json({
-            success: true,
-            convertedUsd: usdValue,
-            totalUsd: newTotalUsd
-        });
+        res.json({ success: true, convertedUsd: usdValue, totalUsd: newTotalUsd });
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Server error"
-        });
+        res.status(500).json({ success: false, message: "Server error" });
     }
 });
 
@@ -78,27 +62,17 @@ Router.get('/transactions/:walletAddress', async (req, res) => {
         const { walletAddress } = req.params;
 
         if (!walletAddress) {
-            return res.status(400).json({
-                success: false,
-                message: "Wallet address required"
-            });
+            return res.status(400).json({ success: false, message: "Wallet address required" });
         }
 
         const transactions = await DEX.find({ walletAddress })
             .sort({ createdAt: -1 });
 
-        res.status(200).json({
-            success: true,
-            count: transactions.length,
-            transactions
-        });
+        res.status(200).json({ success: true, count: transactions.length, transactions });
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Server error"
-        });
+        res.status(500).json({ success: false, message: "Server error" });
     }
 });
 

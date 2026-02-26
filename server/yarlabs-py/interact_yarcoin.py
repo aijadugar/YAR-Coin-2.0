@@ -1,10 +1,8 @@
 from web3 import Web3
 import os, json
 from dotenv import load_dotenv
-
-# Load environment variables
 load_dotenv()
-RPC = os.getenv("RPC_URL")  # Hardhat: http://127.0.0.1:8545
+RPC = os.getenv("RPC_URL")
 PRIVATE_KEY = os.getenv("PRIVATE_KEY")
 MY_ADDRESS = Web3.to_checksum_address(os.getenv("WALLET_ADDRESS"))
 CONTRACT_ADDRESS = Web3.to_checksum_address(os.getenv("CONTRACT_ADDRESS"))

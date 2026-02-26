@@ -1,7 +1,7 @@
 const Student = require('../models/Student');
 const express = require('express');
 const Router = express.Router();
-const {ethers} = require('ethers');
+const { ethers } = require('ethers');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -9,12 +9,12 @@ let hardhatAccounts = [];
 let currentAccountIndex = 7;
 const provider = new ethers.JsonRpcProvider(process.env.HARDHAT_RPC);
 (async () => {
-  try {
-    const addresses = await provider.send("eth_accounts", []);
-    hardhatAccounts = addresses;
-  } catch (err) {
-    console.error("Error loading Hardhat accounts:", err);
-  }
+    try {
+        const addresses = await provider.send("eth_accounts", []);
+        hardhatAccounts = addresses;
+    } catch (err) {
+        console.error("Error loading Hardhat accounts:", err);
+    }
 })();
 
 Router.post('/', async (req, res) => {
@@ -29,8 +29,8 @@ Router.post('/', async (req, res) => {
         await student.save();
         res.status(200).json(student);
     }
-    catch (err){
-        res.status(400).json({error : err.message});
+    catch (err) {
+        res.status(400).json({ error: err.message });
     }
 });
 
@@ -40,7 +40,7 @@ Router.get('/', async (req, res) => {
         res.status(200).json(students);
     }
     catch (err) {
-        res.status(400).json({error : err.message});
+        res.status(400).json({ error: err.message });
     }
 });
 

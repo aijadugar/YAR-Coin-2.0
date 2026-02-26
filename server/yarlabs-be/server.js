@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const cron = require('node-cron');
 const http = require('http');
-const {Server} = require('socket.io');
+const { Server } = require('socket.io');
 const dotenv = require('dotenv');
 dotenv.config();
 const studentRoutes = require('./routes/studentRoutes');
@@ -12,7 +12,6 @@ const teacherRoutes = require('./routes/teacherRoutes');
 const Teacher = require('./models/Teacher');
 const biddingRoutes = require('./routes/biddingRoutes');
 const Bidding = require('./models/Bidding')
-const DEX = require('./models/DEX');
 const DEXRoutes = require('./routes/DEXRoutes');
 const Message = require('./models/Message');
 const statRoutes = require('./routes/statRoutes');
@@ -21,31 +20,6 @@ const nftRoutes = require('./routes/nftRoutes');
 
 const app = express();
 const server = http.createServer(app);
-// ngrok config add-authtoken <YOUR_AUTH_TOKEN>
-// ngrok http 5000
-
-// Optional: Use MetaMask
-
-// Add your local Hardhat network to MetaMask:
-// Network Name: Hardhat Local
-// RPC URL: http://127.0.0.1:8545
-// Chain ID: 31337
-// Currency: ETH
-// Import teacher’s private key into MetaMask.
-// Then add YARC token manually in MetaMask:
-// Token Contract Address: 0x5FbDB2315678afecb367f032d93F642f64180aa3
-// Symbol: YARC
-// Decimals: 18
-// Now you’ll see 10000 YARC in their wallet UI.
-
-// Option A: Hardhat console
-// npx hardhat console --network localhost
-// const token = await ethers.getContractAt(
-//     "YourToken", 
-//     "0x5FbDB2315678afecb367f032d93F642f64180aa3"
-// );
-// const balance = await token.balanceOf("0xTeacherWalletAddress");
-// ethers.utils.formatUnits(balance, 18); // shows 10000
 
 app.use(cors({
     origin: "*",
@@ -123,7 +97,6 @@ io.on("connection", (socket) => {
             console.log(error);
         }
     });
-
 
     socket.on("sendMessage", async ({ userId, role, message }) => {
         try {

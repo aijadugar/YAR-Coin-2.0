@@ -5,6 +5,6 @@ const NFTSchema = new mongoose.Schema({
     description: { type: String, default: "" },
     assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'Student', required: true },
     assignedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher', required: true },
-}, {timestamps: true});
+}, { timestamps: true });
 
 module.exports = mongoose.model('NFT', NFTSchema);

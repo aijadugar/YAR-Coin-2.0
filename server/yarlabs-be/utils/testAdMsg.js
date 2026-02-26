@@ -1,6 +1,6 @@
 const { io } = require("socket.io-client");
 
-const socket = io("https://supreme-space-funicular-wr7vr55qgw5jfgjww-5000.app.github.dev");
+const socket = io("https://fictional-journey-9796755g5qgwc7gwg-5000.app.github.dev");
 
 socket.on("connect", () => {
     socket.emit("joinRoom", {

@@ -17,6 +17,8 @@
     "ethers": "^6.15.0",
     "express": "^5.1.0",
     "mongoose": "^8.19.2",
-    "node-cron": "^4.2.1"
+    "node-cron": "^4.2.1",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
   }
 }
