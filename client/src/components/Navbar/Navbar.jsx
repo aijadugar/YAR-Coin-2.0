@@ -138,6 +138,12 @@ export default function Navbar({
                       DEX
                     </Link>
                 </button>
+
+                 <button className="dropdown-logout-btn">
+                    <Link to="/penaltyhistory">
+                      View Penalty History
+                    </Link>
+                </button>
               
 
                 <button 

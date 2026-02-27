@@ -261,7 +261,7 @@ const handleLogin = async (e) => {
     showMessage("Backend offline — Dev login successful", "success");
 
     setTimeout(() => {
-      navigate("/student-home", {
+      navigate(mockRole === "teacher"?"/teacher-home" : "student-home", {
         state: { ...mockUser, role: mockRole }
       });
     }, 1000);
@@ -303,14 +303,14 @@ const handleLogin = async (e) => {
               className={role === "student" ? "active" : ""}
               onClick={() => setRole("student")}
             >
-              Student
+              Candidate
             </button>
             <button
               type="button"
               className={role === "teacher" ? "active" : ""}
               onClick={() => setRole("teacher")}
             >
-              Teacher
+              Mentor
             </button>
           </div>
         )}
@@ -361,7 +361,7 @@ const handleLogin = async (e) => {
               <input
                 type="text"
                 name="name"
-                placeholder={`Enter your ${role} name`}
+                placeholder={`Enter your name`}
                 value={getCurrentFormData().name}
                 onChange={getCurrentHandleChange()}
                 required
@@ -446,7 +446,7 @@ const handleLogin = async (e) => {
             </p>
 
             <button type="submit" disabled={isLoading}>
-              {isLoading ? "Creating Account..." : `Register as ${role}`}
+              {isLoading ? "Creating Account..." : `Register`}
             </button>
           </form>
         )}

@@ -1,58 +1,104 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./PenaltyPage.css";
 
 const Penalty = () => {
   const [candidateWallet, setCandidateWallet] = useState("");
   const [amount, setAmount] = useState("");
   const [reason, setReason] = useState("");
-  const [showHistory, setShowHistory] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState({ text: "", type: "" });
 
-  // 🔥 Dummy penalty history (API baad me connect karenge)
-  const [penalties] = useState([
-    {
-      _id: "1",
-      candidateWallet: "0x123...abc",
-      amount: 5,
-      reason: "Low participation",
-      createdAt: new Date()
-    },
-    {
-      _id: "2",
-      candidateWallet: "0x456...xyz",
-      amount: 3,
-      reason: "Late submission",
-      createdAt: new Date()
+  const navigate = useNavigate();
+
+  // 🔐 Protect Route (Only Teacher)
+  useEffect(() => {
+    const role = localStorage.getItem("userRole");
+    if (role !== "teacher") {
+      alert("Access denied. Teachers only.");
+      navigate("/");
     }
-  ]);
+  }, [navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Candidate Wallet:", candidateWallet);
-    console.log("Deduction Amount:", amount);
-    console.log("Reason:", reason);
+    const teacherWallet = localStorage.getItem("walletAddress");
 
-    alert("Adjustment Submitted (API not connected yet)");
-  };
+    if (!teacherWallet) {
+      setMessage({
+        text: "Teacher wallet not found. Please login again.",
+        type: "error",
+      });
+      return;
+    }
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleString();
+    setIsLoading(true);
+    setMessage({ text: "", type: "" });
+
+    try {
+      const response = await fetch(
+        "https://fictional-journey-9796755g5qgwc7gwg-5000.app.github.dev/apply/panelty",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fromWallet: candidateWallet,   // student
+            toWallet: teacherWallet,       // teacher
+            amount: Number(amount),
+            description: reason || "",
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Penalty failed");
+      }
+
+      setMessage({
+        text: "Penalty applied successfully",
+        type: "success",
+      });
+
+      // Reset form
+      setCandidateWallet("");
+      setAmount("");
+      setReason("");
+
+      console.log("Backend Response:", data);
+
+    } catch (error) {
+      console.error("Backend Error:", error);
+      setMessage({
+        text: "Failed to apply penalty ❌",
+        type: "error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="penalty-wrapper">
-
       <div className="penalty-container">
         <div className="penalty-card">
           <h2 className="penalty-title">Mentor Adjustment Panel</h2>
 
-          <form onSubmit={handleSubmit}>
+          {message.text && (
+            <div className={`penalty-message ${message.type}`}>
+              {message.text}
+            </div>
+          )}
 
-            <label>Candidate Wallet Address</label>
+          <form onSubmit={handleSubmit}>
+            <label>Student Wallet Address</label>
             <input
               type="text"
-              placeholder="Enter candidate wallet address"
+              placeholder="Enter student wallet address"
               value={candidateWallet}
               onChange={(e) => setCandidateWallet(e.target.value)}
               required
@@ -65,7 +111,7 @@ const Penalty = () => {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               required
-              min="0"
+              min="1"
             />
 
             <label>Reason (optional)</label>
@@ -76,46 +122,12 @@ const Penalty = () => {
               rows="3"
             />
 
-            <button type="submit" className="apply-btn">
-              Apply Adjustment
+            <button type="submit" className="apply-btn" disabled={isLoading}>
+              {isLoading ? "Processing..." : "Apply Adjustment"}
             </button>
-
-            <button
-              type="button"
-              className="history-btn"
-              onClick={() => setShowHistory(!showHistory)}
-            >
-              {showHistory ? "Close Penalty History" : "View Penalty History"}
-            </button>
-
           </form>
         </div>
       </div>
-
-      {/* 🔥 Side History Panel */}
-      {showHistory && (
-        <div className="history-panel">
-          <h3>Penalty History</h3>
-
-          <div className="history-content">
-            {penalties.length === 0 ? (
-              <p className="no-transactions">No penalties found</p>
-            ) : (
-              penalties.map((penalty) => (
-                <div key={penalty._id} className="transaction-card">
-                  <p><strong>Wallet:</strong> {penalty.candidateWallet}</p>
-                  <p><strong>Deducted:</strong> {penalty.amount} YARC</p>
-                  <p><strong>Reason:</strong> {penalty.reason}</p>
-                  <p className="tx-date">
-                    {formatDate(penalty.createdAt)}
-                  </p>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      )}
-
     </div>
   );
 };
