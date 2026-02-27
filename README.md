@@ -39,16 +39,16 @@
 ```mermaid
 flowchart TD
 
-    A[Frontend - React / Client App] -->|REST APIs| B[Backend - Node.js + Express]
+    A[Frontend - React] -->|REST APIs| B[Backend - Express]
     A -->|WebSocket| C[Socket Server]
     
     B --> D[(MongoDB Database)]
     B --> E[Hardhat Blockchain Layer]
-    B --> F[Python Smart Contract Deployment Layer]
+    B --> F[Python Smart Contract Deployment]
     
-    B --> G[Cron Job - Auction Settlement Engine]
+    B --> G[Auction Settlement Engine]
     
-    E --> H[(Ethereum Smart Contracts)]
+    E --> H[(Smart Contracts)]
     
     C --> D
     
@@ -86,7 +86,7 @@ sequenceDiagram
     Frontend->>Backend: Send Credentials
     Backend->>Database: Validate User
     Database-->>Backend: User Data
-    Backend-->>Frontend: Auth Token + Role
+    Backend-->>Frontend: Auth Token and Role
 ```
 
 ---
@@ -94,14 +94,14 @@ sequenceDiagram
 ## 2 Real-Time Chat Tunnel (WebSocket)
 
 * Room-based messaging
-* Admin ↔ Member communication
+* Admin and it's aquired Member's communication
 * Used during auctions & dispute discussions
 
 ```mermaid
 flowchart LR
     A[Client A] -->|WebSocket| S(Socket Server)
     B[Client B] -->|WebSocket| S
-    S --> DB[(Message Store)]
+    S -->|Store| DB[(Message Store)]
 ```
 
 ---
@@ -110,16 +110,16 @@ flowchart LR
 
 Admins can evaluate:
 
-* GitHub contribution stats
+* GitHub contribution stats of each members
 * Repository analysis
 * Contribution scoring logic
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[Admin Dashboard] --> B[Backend]
     B --> C[GitHub Stats Engine]
-    C --> D[(Score Calculation)]
-    D --> E[(Database)]
+    C --> D[Score Calculation]
+    D --> E[Admin Dashboard]
 ```
 
 ---
@@ -129,16 +129,17 @@ flowchart TD
 Used when:
 
 * Member misses contribution targets
-* Rule violations occur
+* Rule violations occurs
 
 ### Architecture
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[Admin Applies Penalty] --> B[Backend]
-    B --> C[(Penalty Collection)]
-    C --> D[Student Wallet Update]
-    D --> E[Penalty History Log]
+    B --> C[Checking Collections]
+    C --> D[Member Wallet Update]
+    D --> E[Admin Wallet Update]
+    E --> F[(Penalty History Log)]
 ```
 
 ---
@@ -147,18 +148,12 @@ flowchart TD
 
 Achievements & milestones are minted as NFTs.
 
-### Blockchain Stack:
-
-* Hardhat
-* Smart Contracts
-* Python deployment scripts
-
 ```mermaid
-flowchart TD
+flowchart LR
     A[Admin Mint NFT] --> B[Backend]
     B --> C[Hardhat Layer]
-    C --> D[Smart Contract Call]
-    D --> E[(Ethereum Network)]
+    C --> D[Smart Contract]
+    D --> E[(Local Network)]
     D --> F[(Transaction Hash Stored)]
 ```
 
@@ -166,32 +161,30 @@ flowchart TD
 
 ## 6 Live Auction & Bidding Engine
 
-### Real-Time Auction Model
+Real-Time Auction Model
 
 ```mermaid
 flowchart TD
-    A[Student Places Bid] --> B[Backend]
-    B --> C[(Bid Collection)]
-    B --> D[Socket Broadcast]
-    D --> E[Live Dashboard Update]
+    A[Members Set Base Price] --> B[Backend]
+    B --> C[(Base Price Store)]
+    
+    D[Admin Places Bid] --> E[Backend]
+    E --> F[Bid Validation with Base Price]
+    F --> G[Bid Collection]
+    G --> H[(Bids Store)]
+    
+    E --> I[Network Broadcast]
+    I --> J[Live Dashboard Update]
 ```
 
 ---
 
 ## 7 Automated Auction Settlement (Cron Engine)
 
-Runs every minute.
-
-### Logic:
-
-* Identify ended auctions
-* Determine highest bidder
-* Transfer ownership
-* Update balances
-* Log transactions
+Now for testing it runs runs every minute.
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[Cron Trigger] --> B[Fetch Active Auctions]
     B --> C{Auction Expired?}
     C -->|Yes| D[Determine Winner]
@@ -210,7 +203,7 @@ Convert:
 * YAR ↔ USD (Internal ledger based)
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[Member Requests Conversion] --> B[Backend]
     B --> C[Validate Balance]
     C --> D[Update Ledger]
@@ -223,36 +216,29 @@ flowchart TD
 
 ### Collections:
 
-* Teachers
-* Students
-* Transactions
+* Admins
+* Members
+* Biddings
 * Penalties
 * NFTs
-* Biddings
-* DEX Ledger
+* DEXs
 * Messages
-* Auctions
 
 ```mermaid
 erDiagram
-    TEACHERS ||--o{ PENALTIES : applies
-    STUDENTS ||--o{ PENALTIES : receives
-    STUDENTS ||--o{ BIDDINGS : places
-    STUDENTS ||--o{ TRANSACTIONS : has
-    STUDENTS ||--o{ NFTS : owns
-    AUCTIONS ||--o{ BIDDINGS : contains
+    ADMINS ||--o{ MEMBERS : acquires
+    ADMINS ||--o{ BIDDINGS : places
+    ADMINS ||--o{ PENALTIES : gives
+    ADMINS ||--o{ TASKS : assigns
+    ADMINS ||--o{ STATS : views
+
+    MEMBERS ||--|| BASEPRICE : sets
+    MEMBERS ||--o{ BIDDINGS : participates
+    MEMBERS ||--o{ YARCS : wins
+    MEMBERS ||--o{ PENALTIES : receives
+    MEMBERS ||--o{ DEX : converts
+    MEMBERS ||--o{ NFTS : wins
 ```
-
----
-
-# Security Architecture
-
-* JWT-based Authentication
-* Role-based Authorization
-* Wallet Address Validation
-* Indexed Queries for Performance
-* Controlled NFT Minting (Admin Only)
-* Server-Side Auction Settlement (Anti-cheat)
 
 ---
 
@@ -260,11 +246,11 @@ erDiagram
 
 | Layer           | Technology        |
 | --------------- | ----------------- |
-| Frontend        | React / Tailwind  |
-| Backend         | Node.js / Express |
+| Frontend        | React js          |
+| Backend         | Express js        |
 | Database        | MongoDB           |
 | Blockchain      | Hardhat           |
-| Smart Contracts | Solidity          |
+| Smart Contracts | Solidity (Web3)   |
 | Deployment      | Python Scripts    |
 | Real-time       | Socket.io         |
 | Scheduler       | node-cron         |
@@ -272,57 +258,22 @@ erDiagram
 
 ---
 
-# Complete System Flow
+# Why YAR Coin instead of an AI tool?
 
-```mermaid
-flowchart TD
+Inspired from master–slave architecture, **YAR-Coin-2.0** fills the structural gaps that most large organizations and the education sector face. It’s like a GitHub for developers, but designed for institutional ecosystems.
 
-    U[User] --> F[Frontend]
+* Member base price system
+* Admin bidding and acquisition model
+* Live auction engine with real-time updates
+* YAR reward distribution system
+* Penalty governance and accountability tracking
+* NFT minting for achievements
+* DEX conversion for YAR ↔ USD value
+* Real-time communication layer
+* Admin dashboard with member stats and task management
+* Hybrid Web2 backend + Web3 ownership integration
 
-    F -->|Login| B[Backend]
-    F -->|Chat| S[Socket Server]
-    F -->|Bid| B
-    F -->|Convert| B
-    F -->|Mint| B
-
-    B --> DB[(MongoDB)]
-    B --> BC[Blockchain]
-    B --> CRON[Cron Engine]
-
-    CRON --> DB
-    CRON --> BC
-
-    BC --> ETH[(Ethereum Network)]
-```
-
----
-
-# System Philosophy
-
-YAR-Coin-2.0 is built around:
-
-* Contribution → Reward Loop
-* Accountability → Penalty Governance
-* Achievement → NFT Ownership
-* Competition → Live Auctions
-* Transparency → Real-time Communication
-* Hybrid Web2 + Web3 Architecture
-
----
-
-# Final Summary
-
-YAR-Coin-2.0 is not just a token system.
-
-It is a **Contribution Economy Framework** that integrates:
-
-* Real-time systems
-* Automated governance
-* Blockchain ownership
-* Gamified learning incentives
-* Decentralized value exchange
-
----
+YAR-Coin-2.0 turns contributions into measurable value, makes accountability transparent, and converts performance into digital ownership.
 
 # New version of YARCoin...YAR-Coin-2.0
 
