@@ -37,7 +37,7 @@ app.use('/mint', nftRoutes);
 app.use('/', DEXRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('MongoDB connected!'))
+    .then(() => console.log('MongoDB connected...!'))
     .catch((err) => console.log(err));
 
 const io = new Server(server, {
@@ -156,5 +156,5 @@ io.on("connection", (socket) => {
 // });
 
 server.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`)
+    console.log(`Server port : ${process.env.PORT}`)
 });

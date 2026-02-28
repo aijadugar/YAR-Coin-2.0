@@ -4,6 +4,16 @@ const Student = require('../models/Student');
 const Teacher = require('../models/Teacher');
 const Bidding = require('../models/Bidding');
 
+Router.get('/student/:studentId', async (req, res) => {
+    try {
+        const bids = await Bidding.find({ studentId: req.params.studentId }).sort({ bidAmount: -1 });
+        res.status(200).json(bids);
+    }
+    catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
 Router.post('/', async (req, res) => {
     try {
         const { studentId, teacherId, bidAmount } = req.body;
@@ -30,16 +40,6 @@ Router.post('/', async (req, res) => {
 
         await bidding.save();
         res.status(200).json(bidding);
-    }
-    catch (err) {
-        res.status(400).json({ error: err.message });
-    }
-});
-
-Router.get('/student/:studentId', async (req, res) => {
-    try {
-        const bids = await Bidding.find({ studentId: req.params.studentId }).sort({ bidAmount: -1 });
-        res.status(200).json(bids);
     }
     catch (err) {
         res.status(400).json({ error: err.message });

@@ -3,6 +3,24 @@ const Router = express.Router();
 const DEX = require('../models/DEX');
 const Student = require('../models/Student');
 
+Router.get('/transactions/:walletAddress', async (req, res) => {
+    try {
+        const { walletAddress } = req.params;
+
+        if (!walletAddress) {
+            return res.status(400).json({ success: false, message: "Wallet address required" });
+        }
+
+        const transactions = await DEX.find({ walletAddress })
+            .sort({ createdAt: -1 });
+
+        res.status(200).json({ success: true, count: transactions.length, transactions });
+
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+
 Router.post('/convert', async (req, res) => {
     try {
         const { walletAddress, yarAmount } = req.body;
@@ -42,36 +60,11 @@ Router.post('/convert', async (req, res) => {
         const previousTotal = total.length > 0 ? total[0].totalUsd : 0;
         const newTotalUsd = previousTotal + usdValue;
 
-        await DEX.create({
-            walletAddress,
-            fromYar: amount,
-            usdBalance: usdValue,
-            totalUsd: newTotalUsd
-        });
+        await DEX.create({ walletAddress, fromYar: amount, usdBalance: usdValue, totalUsd: newTotalUsd });
 
         res.json({ success: true, convertedUsd: usdValue, totalUsd: newTotalUsd });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: "Server error" });
-    }
-});
-
-Router.get('/transactions/:walletAddress', async (req, res) => {
-    try {
-        const { walletAddress } = req.params;
-
-        if (!walletAddress) {
-            return res.status(400).json({ success: false, message: "Wallet address required" });
-        }
-
-        const transactions = await DEX.find({ walletAddress })
-            .sort({ createdAt: -1 });
-
-        res.status(200).json({ success: true, count: transactions.length, transactions });
-
-    } catch (error) {
-        console.error(error);
         res.status(500).json({ success: false, message: "Server error" });
     }
 });

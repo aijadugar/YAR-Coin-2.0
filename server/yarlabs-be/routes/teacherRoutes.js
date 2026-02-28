@@ -25,6 +25,16 @@ const tokenAbi = [
 const tokenAddress = process.env.TOKEN_CONTRACT_ADDRESS;
 const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, deployerWallet);
 
+Router.get('/', async (req, res) => {
+    try {
+        const teachers = await Teacher.find();
+        res.status(200).json(teachers);
+    }
+    catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
 Router.post('/', async (req, res) => {
     try {
         if (currentAccountIndex >= 6) {
@@ -40,16 +50,6 @@ Router.post('/', async (req, res) => {
         const teacher = new Teacher(req.body);
         await teacher.save();
         res.status(200).json(teacher);
-    }
-    catch (err) {
-        res.status(400).json({ error: err.message });
-    }
-});
-
-Router.get('/', async (req, res) => {
-    try {
-        const teachers = await Teacher.find();
-        res.status(200).json(teachers);
     }
     catch (err) {
         res.status(400).json({ error: err.message });

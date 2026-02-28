@@ -40,12 +40,7 @@ Router.post("/panelty", async (req, res) => {
         await student.save();
         await teacher.save();
 
-        const panelty = new Panelty({
-            student: student._id,
-            teacher: teacher._id,
-            amount,
-            description
-        });
+        const panelty = new Panelty({student: student._id, teacher: teacher._id, amount, description});
         await panelty.save();
 
         res.status(200).json({ message: "Penalty applied successfully", panelty });

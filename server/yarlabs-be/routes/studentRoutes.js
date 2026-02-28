@@ -17,6 +17,16 @@ const provider = new ethers.JsonRpcProvider(process.env.HARDHAT_RPC);
     }
 })();
 
+Router.get('/', async (req, res) => {
+    try {
+        const students = await Student.find();
+        res.status(200).json(students);
+    }
+    catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
 Router.post('/', async (req, res) => {
     try {
         if (currentAccountIndex >= hardhatAccounts.length) {
@@ -28,16 +38,6 @@ Router.post('/', async (req, res) => {
         const student = new Student(req.body);
         await student.save();
         res.status(200).json(student);
-    }
-    catch (err) {
-        res.status(400).json({ error: err.message });
-    }
-});
-
-Router.get('/', async (req, res) => {
-    try {
-        const students = await Student.find();
-        res.status(200).json(students);
     }
     catch (err) {
         res.status(400).json({ error: err.message });
