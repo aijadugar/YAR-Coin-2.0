@@ -86,7 +86,7 @@ const Penalty = () => {
     <div className="penalty-wrapper">
       <div className="penalty-container">
         <div className="penalty-card">
-          <h2 className="penalty-title">Mentor Adjustment Panel</h2>
+          <h2 className="penalty-title">Penalty System</h2>
 
           {message.text && (
             <div className={`penalty-message ${message.type}`}>
@@ -123,7 +123,7 @@ const Penalty = () => {
             />
 
             <button type="submit" className="apply-btn" disabled={isLoading}>
-              {isLoading ? "Processing..." : "Apply Adjustment"}
+              {isLoading ? "Processing..." : "Apply Penalty"}
             </button>
           </form>
         </div>

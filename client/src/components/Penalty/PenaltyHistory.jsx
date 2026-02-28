@@ -61,7 +61,7 @@ const PenaltyHistory = () => {
         <h2 className="history-title">My Penalty History</h2>
 
         <div className="total-penalty-card">
-          Total Penalties: <span>{totalPenalty} YARC</span>
+          Total Penalties: <span>{totalPenalty}</span>
         </div>
 
         {history.length === 0 ? (

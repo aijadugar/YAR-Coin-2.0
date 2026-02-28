@@ -8,6 +8,7 @@ import TeacherChatInterface from "./components/Chat-Interface/TeacherChatInterfa
 import Dex from "./components/DEX/Dex";
 import Penalty from "./components/Penalty/PenaltyPage";
 import PenaltyHistory from "./components/Penalty/PenaltyHistory";
+import NFT from "./components/NFT/NFT";
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
         <Route path="/dexes" element={<Dex />} />
         <Route path="/penalty" element={<Penalty/>}/>
         <Route path="/penaltyhistory" element={<PenaltyHistory/>}/>
-
+        <Route path="/nft" element={<NFT/>}/>
       </Routes>
     </Router>
   );
