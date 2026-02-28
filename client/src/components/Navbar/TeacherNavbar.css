@@ -124,13 +124,13 @@
 
 
 
-.dropdown-logout-btn {
+.dropdown-logout-btn, .grantAchievement-btn {
   width: 100%;
   padding: 0.6rem;
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  margin-top: 0.6rem;
+  margin-top: 0.9rem;
   font-weight: 600;
 }
 
@@ -159,6 +159,11 @@ button.penalty-btn {
   margin-left:10px;
 }
 
+button.grantAchievement-btn{
+  color:white;
+  background: #2ecc71;;
+}
+
 /* Hover effect */
 button.dashboard-btn:hover {
   transform: translateY(-2px);
@@ -170,17 +175,23 @@ button.penalty-btn:hover {
   box-shadow: 0 8px 15px rgba(99,102,241,0.3);
 }
 
+button.grantAchievement-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(99, 242, 3, 0.3);
+}
+
 .dashboard-btn a,
-.penalty-btn a {
+.penalty-btn a,
+.grantAchievement-btn a {
   text-decoration: none;
   color: inherit;
   display: block;
 }
 
-.dropdown-logout-btn {
+/* .dropdown-logout-btn {
   background: #f0cd07;
   color: white;
-}
+} */
 
 .dashboard-btn a {
   text-decoration: none;
