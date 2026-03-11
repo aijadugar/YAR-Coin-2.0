@@ -99,7 +99,7 @@ export default function Auth() {
           walletAddress: data.walletAddress
         });
       } else {
-        showMessage("✅ Registered successfully! Please check your wallet address.", "success");
+        showMessage("Registered successfully! Please check your wallet address.", "success");
       }
 
       setTab("login");
@@ -157,7 +157,7 @@ const handleLogin = async (e) => {
     console.log("User:", user);
     console.log("User role:", userRole);
 
-    // ✅ STORE USER DATA IN LOCALSTORAGE
+    // STORE USER DATA IN LOCALSTORAGE
     localStorage.setItem("userEmail", user.email);
     localStorage.setItem("userName", user.name);
     localStorage.setItem("userRole", userRole);
@@ -189,7 +189,7 @@ const handleLogin = async (e) => {
 
   } catch (err) {
     console.error("Error:", err);
-    showMessage("❌ Failed to connect to backend", "error");
+    showMessage("Failed to connect to backend", "error");
   } finally {
     setIsLoading(false);
   }
@@ -233,7 +233,7 @@ const handleLogin = async (e) => {
 //     showMessage("Login successful! Redirecting...", "success");
 
 //     setTimeout(() => {
-//       navigate(userRole === "teacher" ? "/teacher-home" : "/student-home", {
+//       navigate(userRole === "teacher" ? "/teacher-home" : "/student/playground", {
 //         state: { ...user, role: userRole }
 //       });
 //     }, 1000);
@@ -249,7 +249,7 @@ const handleLogin = async (e) => {
 //       walletAddress: "MOCK_WALLET_001"
 //     };
 
-//     const mockRole = "student"; // change to "teacher" if needed
+//     const mockRole = "teacher"; // change to "teacher" if needed
 
 //     // Store mock user
 //     localStorage.setItem("userEmail", mockUser.email);
@@ -261,7 +261,7 @@ const handleLogin = async (e) => {
 //     showMessage("Backend offline — Dev login successful", "success");
 
 //     setTimeout(() => {
-//       navigate(mockRole === "teacher"?"/teacher-home" : "student-home", {
+//       navigate(mockRole === "teacher"?"/teacher-home" : "/student/playground", {
 //         state: { ...mockUser, role: mockRole }
 //       });
 //     }, 1000);

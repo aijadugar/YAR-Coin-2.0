@@ -18,7 +18,7 @@ export default function Navbar({
   const handleLogout = () => {
     localStorage.clear(); // clear all login data
     if (onLogout) onLogout();
-    window.location.href = "/"; // redirect to auth page
+    window.location.href = "/"; // redirect to home page
   };
 
   const toggleMobileMenu = () => {
