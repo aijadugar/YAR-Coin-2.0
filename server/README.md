@@ -23,7 +23,7 @@ GET    https://yarcoin.vercel.app/stat/repo/:owner/:repo
 POST   https://yarcoin.vercel.app/apply/panelty
 GET    https://yarcoin.vercel.app/apply/panelty/:walletAddress
 POST   https://yarcoin.vercel.app/mint/nft
-GET    https://yarcoin.vercel.app/apply/nft/:walletAddress
+GET    https://yarcoin.vercel.app/mint/nft/:walletAddress
 ```
 
 - Members API's
