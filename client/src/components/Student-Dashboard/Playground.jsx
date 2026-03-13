@@ -53,7 +53,7 @@ const Playground = () => {
   const fetchPlaygroundData = async () => {
     try {
       setLoading(true);
-      console.log("🔄 Fetching data from backend...");
+      console.log("Fetching data from backend...");
       const baseUrl = import.meta.env.VITE_BASE_URL;
       
       // Fetch all students
