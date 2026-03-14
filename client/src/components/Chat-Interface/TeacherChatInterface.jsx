@@ -1,150 +1,131 @@
 import React, { useState, useEffect } from "react";
 import "./TeacherChatInterface.css";
-import socket from "./socket"; // Import the socket instance
+import socket from "./socket";
 import { useNavigate } from "react-router-dom";
 
 function TeacherChatInterface() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [messages, setMessages] = useState([]); // Start with empty array, will be populated from socket
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [students, setStudents] = useState([]);
   const [expandedStudents, setExpandedStudents] = useState({});
-  const [user, setUser] = useState(null); // User state for socket connection
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Temporary Dummy Data (remove when backend ready)
-  const dummyTeam = {
-    mentor: { name: "Raunak Joshi", _id: "mentor1" },
-    students: [
-      { name: "Ankit Bari", _id: "student1", githubUsername: "ankitbari" },
-      { name: "Yash Kerkar", _id: "student2", githubUsername: "yashkerkar" }
-    ]
-  };
+  const baseUrl = import.meta.env.VITE_BASE_URL;
 
-  // Initialize user (teacher/mentor)
+  // Load logged-in teacher from localStorage
   useEffect(() => {
-    // In a real app, this would come from your authentication context
-    // For now, we'll assume the teacher is logged in
+    const userId = localStorage.getItem("userId");
+    const userRole = localStorage.getItem("userRole");
+    const userName = localStorage.getItem("userName");
+
+    if (!userId || !userRole || userRole !== "teacher") {
+      navigate("/auth");
+      return;
+    }
+
     setUser({
-      _id: "6996ba04d3efbe3c0cd891b4", // This should be the actual teacher/mentor ID
-      role: "admin" // or "mentor" based on your backend role naming
+      _id: userId,
+      role: userRole,
+      name: userName,
     });
-  }, []);
+  }, [navigate]);
+
+  // Fetch students owned by this teacher
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchStudents = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`${baseUrl}/api/students`);
+        if (!res.ok) throw new Error("Failed to fetch students");
+        const allStudents = await res.json();
+
+        // Filter students where ownedBy matches the teacher's ID
+        const myStudents = allStudents.filter((s) => s.ownedBy === user._id);
+        setStudents(myStudents);
+
+        // Initialize all as collapsed
+        const initialExpanded = {};
+        myStudents.forEach((_, index) => {
+          initialExpanded[index] = false;
+        });
+        setExpandedStudents(initialExpanded);
+      } catch (error) {
+        console.error("Error fetching students:", error);
+        setStudents([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudents();
+  }, [user, baseUrl]);
 
   // Socket connection and message handling
   useEffect(() => {
     if (!user) return;
 
-    // Join room
+    const socketRole = "admin";
+
     socket.emit("joinRoom", {
       userId: user._id,
-      role: user.role
+      role: socketRole,
     });
 
-    // Load old messages
     socket.on("previousMessages", (msgs) => {
-      // Transform messages to match your frontend format
-      const formattedMessages = msgs.map(msg => ({
+      const formattedMessages = msgs.map((msg) => ({
         text: msg.message,
-        sender: msg.senderRole === "admin" || msg.senderRole === "mentor" ? "teacher" : "student",
+        sender: msg.senderRole === "admin" ? "teacher" : "student",
         _id: msg._id,
-        timestamp: msg.createdAt
+        timestamp: msg.createdAt,
       }));
       setMessages(formattedMessages);
     });
 
-    // Receive new message
     socket.on("receiveMessage", (msg) => {
       const newMessage = {
         text: msg.message,
-        sender: msg.senderRole === "admin" || msg.senderRole === "mentor" ? "teacher" : "student",
+        sender: msg.senderRole === "admin" ? "teacher" : "student",
         _id: msg._id,
-        timestamp: msg.createdAt
+        timestamp: msg.createdAt,
       };
-      setMessages(prev => [...prev, newMessage]);
+      setMessages((prev) => [...prev, newMessage]);
     });
 
-    // Socket connection events for debugging
-    socket.on("connect", () => {
-      console.log("Socket connected successfully");
-    });
+    socket.on("connect", () => console.log("Teacher socket connected"));
+    socket.on("disconnect", (reason) => console.log("Teacher socket disconnected:", reason));
 
-    socket.on("connect_error", (error) => {
-      console.error("Socket connection error:", error);
-    });
-
-    socket.on("disconnect", (reason) => {
-      console.log("Socket disconnected:", reason);
-    });
-
-    // Cleanup on unmount
     return () => {
       socket.off("previousMessages");
       socket.off("receiveMessage");
       socket.off("connect");
-      socket.off("connect_error");
       socket.off("disconnect");
     };
-
   }, [user]);
 
-  // Fetch students (keeping your existing dummy data logic)
-  useEffect(() => {
-    // When backend comes, replace this with real fetch()
-    /*
-    const fetchStudents = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/team-members/TEAM_ID");
-        const data = await res.json();
-        setStudents(data.students.map(s => ({ 
-          name: s.name, 
-          githubUsername: s.githubUsername,
-          _id: s._id 
-        })));
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchStudents();
-    */
-
-    // 🔥 For now using dummy data
-    setStudents(dummyTeam.students.map(s => ({
-      name: s.name,
-      githubUsername: s.githubUsername,
-      _id: s._id
-    })));
-
-    // Initialize all students as collapsed
-    const initialExpandedState = {};
-    dummyTeam.students.forEach((_, index) => {
-      initialExpandedState[index] = false;
-    });
-    setExpandedStudents(initialExpandedState);
-
-  }, []);
-
   const toggleStudent = (index) => {
-    setExpandedStudents(prev => ({
+    setExpandedStudents((prev) => ({
       ...prev,
-      [index]: !prev[index]
+      [index]: !prev[index],
     }));
   };
 
   const handleSend = () => {
-    if (input.trim() === "" || !user) return;
+    if (!input.trim() || !user) return;
 
-    // Send message through socket
     socket.emit("sendMessage", {
       userId: user._id,
-      role: user.role,
-      message: input
+      role: "admin",
+      message: input,
     });
 
     setInput("");
   };
 
-  // Handle Enter key press
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -152,69 +133,57 @@ function TeacherChatInterface() {
     }
   };
 
+  if (loading) {
+    return <div className="loading">Loading students...</div>;
+  }
+
   return (
     <div className="chat-page">
-
-      {/* Sidebar */}
       <div className={`teacher-sidebar ${isSidebarOpen ? "open" : "closed"}`}>
         <div className="sidebar-header">
-        <div className="sidebar-left">
-          <button
-            className="back-btn"
-            onClick={() => navigate(-1)}
-          >
-            ←
+          <div className="sidebar-left">
+            <button className="back-btn" onClick={() => navigate(-1)}>
+              ←
+            </button>
+            <h3>Team Members</h3>
+          </div>
+          <button className="close-btn" onClick={() => setIsSidebarOpen(false)}>
+            ✖
           </button>
-          <h3>Team Members</h3>
         </div>
 
-        <button
-          className="close-btn"
-          onClick={() => setIsSidebarOpen(false)}
-        >
-          ✖
-        </button>
-      </div>
+        {students.length === 0 ? (
+          <div className="no-students">No students assigned yet.</div>
+        ) : (
+          students.map((student, index) => (
+            <div key={student._id} className="student-container">
+              <div className="student-header" onClick={() => toggleStudent(index)}>
+                <span className="student-name">{student.name}</span>
+                <span className="dropdown-icon">
+                  {expandedStudents[index] ? "▼" : "▶"}
+                </span>
+              </div>
 
-        {students.map((student, index) => (
-          <div key={student._id || index} className="student-container">
-            <div 
-              className="student-header"
-              onClick={() => toggleStudent(index)}
-            >
-              <span className="student-name">{student.name}</span>
-              <span className="dropdown-icon">
-                {expandedStudents[index] ? '▼' : '▶'}
-              </span>
-            </div>
-            
-            {expandedStudents[index] && (
-              <div className="github-graph-container">
-                <div className="github-graph-placeholder">
-                  {/* GitHub contribution graph will be loaded here */}
-                  <div className="graph-content">
-                    <p className="graph-placeholder-text">
-                      GitHub Contribution Graph for {student.githubUsername}
-                    </p>
-                    {/* The actual graph will be inserted here via iframe or embed */}
+              {expandedStudents[index] && (
+                <div className="github-graph-container">
+                  <div className="github-graph-placeholder">
+                    <div className="graph-content">
+                      <p className="graph-placeholder-text">
+                        GitHub Contribution Graph for {student.githubUsername || "N/A"}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
+              )}
+            </div>
+          ))
+        )}
       </div>
 
-      {/* Chat Section */}
-      <div
-        className={`chat-container ${isSidebarOpen ? "shifted" : ""}`}
-      >
+      <div className={`chat-container ${isSidebarOpen ? "shifted" : ""}`}>
         <div className="chat-header">
           {!isSidebarOpen && (
-            <button
-              className="open-sidebar-btn"
-              onClick={() => setIsSidebarOpen(true)}
-            >
+            <button className="open-sidebar-btn" onClick={() => setIsSidebarOpen(true)}>
               ☰
             </button>
           )}
@@ -230,12 +199,10 @@ function TeacherChatInterface() {
               <p>No messages yet. Start the conversation!</p>
             </div>
           ) : (
-            messages.map((msg, index) => (
+            messages.map((msg) => (
               <div
-                key={msg._id || index}
-                className={`message ${
-                  msg.sender === "teacher" ? "right" : "left"
-                }`}
+                key={msg._id}
+                className={`message ${msg.sender === "teacher" ? "right" : "left"}`}
               >
                 <div className="message-content">{msg.text}</div>
                 {msg.timestamp && (
@@ -257,10 +224,7 @@ function TeacherChatInterface() {
             onKeyDown={handleKeyPress}
             disabled={!socket.connected}
           />
-          <button 
-            onClick={handleSend}
-            disabled={!socket.connected || !input.trim()}
-          >
+          <button onClick={handleSend} disabled={!socket.connected || !input.trim()}>
             Send
           </button>
         </div>

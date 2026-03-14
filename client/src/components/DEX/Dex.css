@@ -181,7 +181,7 @@
 .history-panel {
   width: 380px;
   background: white;
-  border-radius: 20px;
+  border-radius: 150px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   padding: 1.5rem;
   max-height: 600px;
@@ -269,6 +269,7 @@
 .history-panel::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 10px;
+  width:40px;
 }
 
 .history-panel::-webkit-scrollbar-thumb:hover {

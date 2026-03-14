@@ -11,8 +11,7 @@ export default function Auth() {
   const [message, setMessage] = useState({ text: "", type: "" }); //to show success or error message
   const navigate = useNavigate();
 
-  // Student registration form state
-  //For storing the data of 3 forms
+  // Student registration form state For storing the data of 3 forms
 
   // (a) Student Register
   const [studentFormData, setStudentFormData] = useState({
@@ -194,81 +193,6 @@ const handleLogin = async (e) => {
     setIsLoading(false);
   }
 };
-
-
-// const handleLogin = async (e) => {
-//   e.preventDefault();
-//   setIsLoading(true);
-
-//   const baseUrl = import.meta.env.VITE_BASE_URL;
-
-//   try {
-//     const res = await fetch(`${baseUrl}/login`, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({
-//         email: loginData.email,
-//         walletAddress: loginData.walletAddress
-//       }),
-//     });
-
-//     const data = await res.json();
-
-//     if (!res.ok) {
-//       throw new Error("Backend login failed");
-//     }
-
-//     const user = data.user;
-//     const userRole = data.role;
-
-//     // Store real backend user
-//     localStorage.setItem("userEmail", user.email);
-//     localStorage.setItem("userName", user.name);
-//     localStorage.setItem("userRole", userRole);
-//     localStorage.setItem("userId", user._id);
-//     if (user.walletAddress) {
-//       localStorage.setItem("walletAddress", user.walletAddress);
-//     }
-
-//     showMessage("Login successful! Redirecting...", "success");
-
-//     setTimeout(() => {
-//       navigate(userRole === "teacher" ? "/teacher-home" : "/student/playground", {
-//         state: { ...user, role: userRole }
-//       });
-//     }, 1000);
-
-//   } catch (err) {
-//     console.log("⚠ Backend down — using mock login");
-
-//     // 🔥 MOCK USER (Frontend Only)
-//     const mockUser = {
-//       _id: "mock123",
-//       name: "Dev User",
-//       email: loginData.email || "dev@gmail.com",
-//       walletAddress: "MOCK_WALLET_001"
-//     };
-
-//     const mockRole = "teacher"; // change to "teacher" if needed
-
-//     // Store mock user
-//     localStorage.setItem("userEmail", mockUser.email);
-//     localStorage.setItem("userName", mockUser.name);
-//     localStorage.setItem("userRole", mockRole);
-//     localStorage.setItem("userId", mockUser._id);
-//     localStorage.setItem("walletAddress", mockUser.walletAddress);
-
-//     showMessage("Backend offline — Dev login successful", "success");
-
-//     setTimeout(() => {
-//       navigate(mockRole === "teacher"?"/teacher-home" : "/student/playground", {
-//         state: { ...mockUser, role: mockRole }
-//       });
-//     }, 1000);
-//   } finally {
-//     setIsLoading(false);
-//   }
-// };
 
 
   // Get current form data based on role
