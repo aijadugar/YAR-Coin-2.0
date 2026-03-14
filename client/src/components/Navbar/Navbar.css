@@ -4,6 +4,10 @@ body {
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
+div.bid-item{
+  color:black;
+}
+
 .navbar {
   height: 70px;
   width: 100%;
@@ -132,10 +136,9 @@ body {
   font-weight: 600;
 }
 
-.dropdown-logout-btn {
+.dropdown-logout-btn, .penalty-history-btn {
   width: 100%;
   margin-top: 1.2rem;
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
   border: none;
   padding: 0.75rem;
   border-radius: 10px;
@@ -143,6 +146,24 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+}
+
+.dropdown-logout-btn{
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.penalty-history-btn{
+  background: #2ecc71;
+}
+
+.penalty-history-btn a{
+  text-decoration: none;
+  color:inherit;
+}
+
+.penalty-history-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(99, 242, 3, 0.3);
 }
 
 button.dashboard-btn,
@@ -182,8 +203,8 @@ button.dex-btn:hover {
 }
 
 .dropdown-logout-btn:hover {
-  background: #c0392b;
   transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(241, 4, 4, 0.3);
 }
 
 /* ===== MOBILE MENU BUTTON ===== */

@@ -11,8 +11,7 @@ export default function Auth() {
   const [message, setMessage] = useState({ text: "", type: "" }); //to show success or error message
   const navigate = useNavigate();
 
-  // Student registration form state
-  //For storing the data of 3 forms
+  // Student registration form state For storing the data of 3 forms
 
   // (a) Student Register
   const [studentFormData, setStudentFormData] = useState({
@@ -99,7 +98,7 @@ export default function Auth() {
           walletAddress: data.walletAddress
         });
       } else {
-        showMessage("✅ Registered successfully! Please check your wallet address.", "success");
+        showMessage("Registered successfully! Please check your wallet address.", "success");
       }
 
       setTab("login");
@@ -127,82 +126,13 @@ export default function Auth() {
   };
 
 // Submit login form - UPDATED VERSION
-// const handleLogin = async (e) => {
-//   e.preventDefault();
-//   setIsLoading(true);
-
-//   try {
-//     const baseUrl = import.meta.env.VITE_BASE_URL;
-
-//     const res = await fetch(`${baseUrl}/login`, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({
-//         email: loginData.email,
-//         walletAddress: loginData.walletAddress
-//       }),
-//     });
-
-//     const data = await res.json();
-//     console.log("Data:", data);
-
-//     if (!res.ok) {
-//       showMessage("Error: " + (data.error || "Login failed"), "error");
-//       return;
-//     }
-
-//     const user = data.user;
-//     const userRole = data.role;
-
-//     console.log("User:", user);
-//     console.log("User role:", userRole);
-
-//     // ✅ STORE USER DATA IN LOCALSTORAGE
-//     localStorage.setItem("userEmail", user.email);
-//     localStorage.setItem("userName", user.name);
-//     localStorage.setItem("userRole", userRole);
-//     localStorage.setItem("userId", user._id);
-//     if (user.walletAddress) {
-//       localStorage.setItem("walletAddress", user.walletAddress);
-//     }
-
-//     showMessage("Login successful! Redirecting...", "success");
-
-//     // Navigate based on role with user data
-//     setTimeout(() => {
-//       if (userRole === 'teacher') {
-//         navigate("/teacher-home", { 
-//           state: { 
-//             ...user,
-//             role: 'teacher'
-//           } 
-//         });
-//       } else {
-//         navigate("/student-home", { 
-//           state: { 
-//             ...user,
-//             role: 'student'
-//           } 
-//         });
-//       }
-//     }, 1000);
-
-//   } catch (err) {
-//     console.error("Error:", err);
-//     showMessage("❌ Failed to connect to backend", "error");
-//   } finally {
-//     setIsLoading(false);
-//   }
-// };
-
-
 const handleLogin = async (e) => {
   e.preventDefault();
   setIsLoading(true);
 
-  const baseUrl = import.meta.env.VITE_BASE_URL;
-
   try {
+    const baseUrl = import.meta.env.VITE_BASE_URL;
+
     const res = await fetch(`${baseUrl}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -213,15 +143,20 @@ const handleLogin = async (e) => {
     });
 
     const data = await res.json();
+    console.log("Data:", data);
 
     if (!res.ok) {
-      throw new Error("Backend login failed");
+      showMessage("Error: " + (data.error || "Login failed"), "error");
+      return;
     }
 
     const user = data.user;
     const userRole = data.role;
 
-    // Store real backend user
+    console.log("User:", user);
+    console.log("User role:", userRole);
+
+    // STORE USER DATA IN LOCALSTORAGE
     localStorage.setItem("userEmail", user.email);
     localStorage.setItem("userName", user.name);
     localStorage.setItem("userRole", userRole);
@@ -232,39 +167,28 @@ const handleLogin = async (e) => {
 
     showMessage("Login successful! Redirecting...", "success");
 
+    // Navigate based on role with user data
     setTimeout(() => {
-      navigate(userRole === "teacher" ? "/teacher-home" : "/student-home", {
-        state: { ...user, role: userRole }
-      });
+      if (userRole === 'teacher') {
+        navigate("/teacher-home", { 
+          state: { 
+            ...user,
+            role: 'teacher'
+          } 
+        });
+      } else {
+        navigate("/student/playground", { 
+          state: { 
+            ...user,
+            role: 'student'
+          } 
+        });
+      }
     }, 1000);
 
   } catch (err) {
-    console.log("⚠ Backend down — using mock login");
-
-    // 🔥 MOCK USER (Frontend Only)
-    const mockUser = {
-      _id: "mock123",
-      name: "Dev User",
-      email: loginData.email || "dev@gmail.com",
-      walletAddress: "MOCK_WALLET_001"
-    };
-
-    const mockRole = "student"; // change to "teacher" if needed
-
-    // Store mock user
-    localStorage.setItem("userEmail", mockUser.email);
-    localStorage.setItem("userName", mockUser.name);
-    localStorage.setItem("userRole", mockRole);
-    localStorage.setItem("userId", mockUser._id);
-    localStorage.setItem("walletAddress", mockUser.walletAddress);
-
-    showMessage("Backend offline — Dev login successful", "success");
-
-    setTimeout(() => {
-      navigate(mockRole === "teacher"?"/teacher-home" : "student-home", {
-        state: { ...mockUser, role: mockRole }
-      });
-    }, 1000);
+    console.error("Error:", err);
+    showMessage("Failed to connect to backend", "error");
   } finally {
     setIsLoading(false);
   }
