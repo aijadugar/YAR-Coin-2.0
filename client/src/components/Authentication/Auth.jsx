@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; //for redirecting
 import "./Auth.css";
+import { connectWallet } from "../../utils/connectWallet.js";
 
 export default function Auth() {
 
@@ -9,6 +10,7 @@ export default function Auth() {
   const [role, setRole] = useState("student");  // "student" or "teacher"
   const [isLoading, setIsLoading] = useState(false); //Disables form buttons during API calls (Register & Login button will get disabled)
   const [message, setMessage] = useState({ text: "", type: "" }); //to show success or error message
+  const [walletAddress, setWalletAddress] = useState("");
   const navigate = useNavigate();
 
   // Student registration form state For storing the data of 3 forms
@@ -55,6 +57,12 @@ export default function Auth() {
     e.preventDefault();  //after submitting the form, it prevents the page from getting reload.
     setIsLoading(true); //button for register gets disable, because data is going in database
 
+    if (!walletAddress) {
+      showMessage("Please connect your wallet first", "error");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const baseUrl = import.meta.env.VITE_BASE_URL;
       const url = role === "student" 
@@ -64,15 +72,15 @@ export default function Auth() {
       const payload = role === "student" ? {
         name: studentFormData.name,
         email: studentFormData.email,
+        walletAddress: walletAddress,
         skills: studentFormData.skills.split(',').map(skill => skill.trim()), //array is getting created
         achievements: studentFormData.achievements.split(',').map(ach => ach.trim()), //array is getting created
         basePrice: parseInt(studentFormData.basePrice)
-        // walletAddress auto-assigned by backend for both students and teachers
       } : {
         name: teacherFormData.name,
         email: teacherFormData.email,
+        walletAddress: walletAddress,
         specialization: teacherFormData.specialization
-        // walletAddress auto-assigned by backend
       };
 
       //This sends data to backend
@@ -89,17 +97,12 @@ export default function Auth() {
         return;
       }
 
-      // SHOW WALLET ADDRESS FOR BOTH ROLES (auto-assigned)
-      if (data.walletAddress) {
-        showMessage(`${role.charAt(0).toUpperCase() + role.slice(1)} registered successfully! Your auto-assigned wallet: ${data.walletAddress} - COPY THIS FOR LOGIN`, "success");
-        // Auto-filling the login details
-        setLoginData({
-          email: role === "student" ? studentFormData.email : teacherFormData.email,
-          walletAddress: data.walletAddress
-        });
-      } else {
-        showMessage("Registered successfully! Please check your wallet address.", "success");
-      }
+      showMessage("Registered successfully!", "success");
+
+      setLoginData({
+        email: role === "student" ? studentFormData.email : teacherFormData.email,
+        walletAddress: walletAddress
+      });
       
       // Clear forms
       setStudentFormData({
@@ -115,6 +118,8 @@ export default function Auth() {
         specialization: ""
       });
 
+      setWalletAddress("");
+
     } catch (err) {
       console.error("Error:", err);
       showMessage("Failed to connect to backend", "error");
@@ -122,6 +127,19 @@ export default function Auth() {
       setIsLoading(false);
     }
   };
+
+  const handleConnectWallet = async (e) => {
+  e.preventDefault(); // prevent form submit
+
+  const address = await connectWallet();
+
+  if (address) {
+    setWalletAddress(address);
+    console.log("Wallet Address:", address);
+
+    showMessage("Wallet connected: " + address, "success");
+  }
+};
 
 // Submit login form 
 const handleLogin = async (e) => {
@@ -277,9 +295,6 @@ const handleLogin = async (e) => {
               {isLoading ? "Signing In..." : "Login to YARCoin"}
             </button>
 
-             <button className="metamask-btn">
-              {"Connect to Wallet"}
-            </button>
 
           </form>
         )}
@@ -377,6 +392,12 @@ const handleLogin = async (e) => {
 
             <button type="submit" disabled={isLoading} className="register-btn">
               {isLoading ? "Creating Account..." : `Register`}
+            </button>
+
+            <button type="button"
+              className="metamask-btn"
+              onClick={handleConnectWallet}>
+              {"Connect to Wallet"}
             </button>
           </form>
         )}
