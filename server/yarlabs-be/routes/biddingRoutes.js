@@ -21,10 +21,10 @@ Router.post('/', async (req, res) => {
         const teacher = await Teacher.findById(teacherId);
         const bidding = new Bidding(req.body);
         if (!student) {
-            return res.status(404).json({ message: `Student not found` });
+            return res.status(404).json({ message: `Member not found` });
         }
         if (!teacher) {
-            return res.status(404).json({ message: `Teacher not found` });
+            return res.status(404).json({ message: `Admin not found` });
         }
         const bids = await Bidding.find({ studentId }).sort({ bidAmount: -1 });
         if (bids.length == 0) {
@@ -37,7 +37,6 @@ Router.post('/', async (req, res) => {
         if (bids.length === 0 && bidAmount < student.basePrice) {
             return res.status(400).json({ message: `First bid must be at least the base price of ${student.basePrice}` });
         }
-
         await bidding.save();
         res.status(200).json(bidding);
     }

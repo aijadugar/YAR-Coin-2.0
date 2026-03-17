@@ -17,6 +17,7 @@ const Message = require('./models/Message');
 const statRoutes = require('./routes/statRoutes');
 const paneltyRoutes = require('./routes/paneltyRoutes');
 const nftRoutes = require('./routes/nftRoutes');
+const { ethers } = require('ethers');
 
 const app = express();
 const server = http.createServer(app);
@@ -49,17 +50,17 @@ const io = new Server(server, {
 
 app.post('/login', async (req, res) => {
     try {
-        const { email, walletAddress } = req.body;
-        if (!email || !walletAddress) {
-            return res.status(400).json({ error: 'Email and walletAddres are required!' });
+        const { walletAddress } = req.body;
+        if (!walletAddress) {
+            return res.status(400).json({ error: 'WalletAddres are required!' });
         }
-        const student = await Student.findOne({ email, walletAddress });
+        const student = await Student.findOne({ walletAddress });
         if (student) {
-            return res.status(200).json({ message: 'Login successful!', role: 'student', user: student });
+            return res.status(200).json({ message: 'Login successful...', role: 'student', user: student });
         }
-        const teacher = await Teacher.findOne({ email, walletAddress });
+        const teacher = await Teacher.findOne({ walletAddress });
         if (teacher) {
-            return res.status(200).json({ message: 'Login successful!', role: 'teacher', user: teacher });
+            return res.status(200).json({ message: 'Login successful...', role: 'teacher', user: teacher });
         }
         return res.status(400).json({ error: 'Invalid credentials!' });
     }
@@ -135,23 +136,57 @@ io.on("connection", (socket) => {
 
 // cron.schedule('* * * * *', async () => {
 //     console.log("Running auction settlements...");
+//     const provider = new ethers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
+//     const wallet = new ethers.Wallet(process.env.ADMIN_PRIVATE_KEY, provider);
+//     const contractAddress = process.env.YAR_CONTRACT_ADDRESS;
+//     const abi = ["function transferFrom(address from, address to, uint256 value) public returns (bool)",
+//                  "function allowance(address owner, address spender) view returns (uint256)",
+//                  "function balanceOf(address owner) view returns (uint256)"];
+//     const contract = new ethers.Contract(contractAddress, abi, wallet);
 //     const students = await Student.find({ ownedBy: null });
 //     for (let student of students) {
 //         const lastBid = await Bidding.find({ studentId: student._id }).sort({ createdAt: -1 }).limit(1);
-
+//         if (!lastBid.length) continue;
 //         const auctionEnd = 1 * 60 * 1000; // 3 * 24 * 60 * 60 * 1000
 //         if (new Date() - lastBid[0].createdAt >= auctionEnd) {
 //             const highestBid = await Bidding.find({ studentId: student._id }).sort({ bidAmount: -1 }).limit(1);
-//             student.ownedBy = highestBid[0].teacherId;
+//             if (!highestBid.length) continue;
+//             const bidAmount=highestBid[0].bidAmount;
 //             const teacher = await Teacher.findById(highestBid[0].teacherId);
-//             teacher.purse = teacher.purse - highestBid[0].bidAmount;
+//             if (!teacher) continue;
+//             if (!student.walletAddress || !teacher.walletAddress) {
+//             console.log("Wallet missing!");
+//             continue;
+//         }
+//         if (teacher.purse < bidAmount) {
+//             console.log("Admin has insufficient purse!");
+//             continue;
+//         }
+//         try{
+//             const amount = ethers.parseUnits(bidAmount.toString(), 18);
+//             const allowance = await contract.allowance(teacher.walletAddress, wallet.address);
+//             if (allowance<amount){
+//                 console.log("Admin has not enough approved YARs!");
+//                 continue;
+//             }
+//             const balance= await contract.balanceOf(teacher.walletAddress);
+//             if (balance<amount){
+//                 console.log("Admin has insufficient YAR balance!");
+//                 continue;
+//             }
+//             const tx = await contract.transferFrom(teacher.walletAddress, student.walletAddress, amount);
+//             await tx.wait();
+//             student.ownedBy = teacher._id;
+//             student.yarBalance += bidAmount;
+//             teacher.purse -= bidAmount;
 //             await teacher.save();
-//             student.yarBalance = student.yarBalance + highestBid[0].bidAmount;
 //             await student.save();
-//         }else{
-//             console.log(`Auction is still ongoing.`);
+//             console.log("Auction settled successfully!");
+//         }catch(err){
+//             console.log(`Blockchain transfer failed and ${err.message}`);
 //         }
 //     }
+// }
 //     console.log("Finished auction settlements...");
 // });
 
