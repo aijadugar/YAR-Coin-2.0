@@ -137,6 +137,66 @@
   25%, 75% { opacity: 0.7; transform: translateX(-50%) scale(1.2); background: radial-gradient(ellipse at center, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 60%, transparent 90%); }
 }
 
+/* ── Penalty & NFT Action Buttons (My Team view) ────────── */
+.col-penalty,
+.col-nft {
+  white-space: nowrap;
+}
+
+.action-btn {
+  border: none;
+  padding: 6px 14px;
+  border-radius: 7px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Penalty button -- red/warning style */
+.action-btn.penalty-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color:white;
+  border: 1.5px solid transparent;
+  width:80px;
+  margin-left:-2px;
+  margin-top: -2px;
+}
+.action-btn.penalty-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 3px 10px rgba(102, 126, 234, 0.45);
+  filter: brightness(1.1);
+}
+
+.action-btn.penalty-btn:active {
+  transform: scale(0.97);
+}
+
+/* NFT button -- purple/gradient style */
+.nft-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: 1.5px solid transparent;
+}
+.nft-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 3px 10px rgba(102, 126, 234, 0.45);
+  filter: brightness(1.1);
+}
+.nft-btn:active {
+  transform: scale(0.97);
+}
+.no-underline {
+  text-decoration: none;
+  color: inherit; /* optional: keeps button text color */
+}
+
+
+
+
+
+
 /* ── Page Shell ──────────────────────────────────────────── */
 .bidding-system {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

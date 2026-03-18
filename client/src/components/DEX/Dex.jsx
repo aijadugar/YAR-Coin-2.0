@@ -15,12 +15,16 @@ export default function Dex() {
   // 🔥 Fetch Transactions when History opens
   useEffect(() => {
 
+
+
     const fetchTransactions = async () => {
       if (!walletAddress || !showHistory) return;
 
+      const baseUrl = import.meta.env.VITE_BASE_URL;
+
       try {
         const response = await fetch(
-          `https://fictional-journey-9796755g5qgwc7gwg-5000.app.github.dev/transactions/${walletAddress}`
+          `${baseUrl}/transactions/${walletAddress}`
         );
 
         const data = await response.json();
@@ -49,8 +53,10 @@ export default function Dex() {
     try {
       setLoading(true);
 
+      const baseUrl = import.meta.env.VITE_BASE_URL;
+
       const response = await fetch(
-        "https://fictional-journey-9796755g5qgwc7gwg-5000.app.github.dev/convert",
+        `${baseUrl}/convert`,
         {
           method: "POST",
           headers: {

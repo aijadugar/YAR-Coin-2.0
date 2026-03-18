@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import './TeacherHome.css';
 import TeacherNavbar from "../Navbar/TeacherNavbar";
+import { Link } from "react-router-dom";
 
 const STUDENTS_PER_PAGE = 10;
 const TEACHERS_PER_PAGE = 10;
@@ -263,6 +264,7 @@ const TeacherHome = () => {
   const getSectionTitle = () => {
     if (activeFilter === 'all') return 'Available Members for Bidding';
     if (activeFilter === 'myteam') return 'My Team';
+
     return 'Admins & Current Holdings';
   };
 
@@ -362,6 +364,9 @@ const TeacherHome = () => {
                         <th>Base Price</th>
                         <th>Earned</th>
                         <th>Acquired By</th>
+
+                        {activeFilter === "myteam" && <th>Penalty</th>}
+                        {activeFilter === "myteam" && <th>NFT</th>}
                         {activeFilter === 'all' && <th>Action</th>}
                       </tr>
                     </thead>
@@ -439,6 +444,40 @@ const TeacherHome = () => {
                                   <span className="status-badge available">Available</span>
                                 )}
                               </td>
+
+                              {activeFilter === 'myteam' && (
+                                <td className="col-penalty">
+                                  <button
+                                    className="action-btn penalty-btn"
+                                    onClick={() => {
+                                      // handle penalty logic here
+                                      console.log('Penalty clicked for', d.id);
+                                    }}
+                                  >
+                                    <Link to="/penalty">
+                                      Penalty
+                                    </Link>
+                                  </button>
+                                </td>
+                              )}
+                              {activeFilter === 'myteam' && (
+                                <td className="col-nft">
+                                  <button
+                                    className="action-btn nft-btn"
+                                    onClick={() => {
+                                      // handle NFT logic here
+                                      console.log('NFT clicked for', d.id);
+                                    }}
+                                  >
+                                    <Link to="/nft" className="no-underline">
+                                      Grant Achievement
+                                    </Link>
+                                  </button>
+                                </td>
+                              )}
+
+
+
                               {activeFilter === 'all' && (
                                 <td className="col-action">
                                   {d.isAvailable ? (
