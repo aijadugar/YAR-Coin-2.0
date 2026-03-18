@@ -35,7 +35,7 @@ app.use('/api/biddings', biddingRoutes);
 app.use('/stat', statRoutes);
 app.use('/apply', paneltyRoutes);
 app.use('/mint', nftRoutes);
-app.use('/', DEXRoutes);
+app.use('/dex', DEXRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected...!'))
