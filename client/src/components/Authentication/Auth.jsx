@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; //for redirecting
+import { useNavigate } from "react-router-dom"; 
 import "./Auth.css";
 import { approveYAR } from "../../utils/approveYAR";
 import { connectWallet } from "../../utils/connectWallet.js";
@@ -7,8 +7,8 @@ import { connectWallet } from "../../utils/connectWallet.js";
 export default function Auth() {
 
   //useState variables
-  const [tab, setTab] = useState("register");  // "register" or "login"
-  const [role, setRole] = useState("student");  // "student" or "teacher"
+  const [tab, setTab] = useState("register");  
+  const [role, setRole] = useState("student");  
   const [isLoading, setIsLoading] = useState(false); //Disables form buttons during API calls (Register & Login button will get disabled)
   const [message, setMessage] = useState({ text: "", type: "" }); //to show success or error message
   const [walletAddress, setWalletAddress] = useState("");
@@ -50,7 +50,7 @@ export default function Auth() {
 
   const showMessage = (text, type) => {
     setMessage({ text, type });
-    setTimeout(() => setMessage({ text: "", type: "" }), 5000); //Display success or error message for 5 seconds
+    setTimeout(() => setMessage({ text: "", type: "" }), 5000); //Display success or error message
   };
 
   const handleConnectWallet = async (e) => {
@@ -77,7 +77,6 @@ export default function Auth() {
   }
 
   try {
-    // 🔥 STEP 1: Blockchain Approval (ONLY FOR TEACHER)
       if (role === "teacher") {
         showMessage("Setting up your wallet for token distributon...", "success");
       }
@@ -87,14 +86,13 @@ export default function Auth() {
 
 
       const approved = await approveYAR();
-
       if (!approved) {
         showMessage("Wallet approval failed", "error");
         setIsLoading(false);
         return;
       }
 
-    // 🔥 STEP 2: Backend Registration
+    // Backend Registration
     const baseUrl = import.meta.env.VITE_BASE_URL;
     const url = role === "student" 
       ? `${baseUrl}/api/students`
@@ -320,7 +318,7 @@ const handleLoginWalletConnect = async (e) => {
               type="button"
               className="metamask-btn"
               onClick={handleLoginWalletConnect}>
-              Connect with Wallet
+              Login with Wallet
             </button>
 
 
@@ -421,7 +419,7 @@ const handleLoginWalletConnect = async (e) => {
              <button type="button"
               className="metamask-btn"
               onClick={handleConnectWallet}>
-              Connect to Wallet
+              Connect MetaMask Wallet
             </button>
 
             <button type="submit" disabled={isLoading || !walletAddress} className="register-btn">

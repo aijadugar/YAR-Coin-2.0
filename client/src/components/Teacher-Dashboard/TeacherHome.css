@@ -4,7 +4,6 @@
   align-items: center;
   justify-content: center;
   margin: auto;
-  /* margin-top: 200px; */
   width: 9.1em;
   height: 12em; /* Increased height to accommodate shadow */
   transform: scale(2.5);
@@ -260,269 +259,499 @@
 
 .bidding-system {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
+  min-height: 100vh;
+  padding: 24px 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  align-items: center;
-}
-
-.bidding-header {
-  text-align: center;
-  color: white;
-  margin-bottom: 30px;
-}
-
-.bidding-header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.bidding-header p {
-  font-size: 1.2rem;
-  opacity: 0.9;
 }
 
 .bidding-container {
   max-width: 1200px;
   margin: 0 auto;
-  display: grid;
-  gap: 30px;
-}
-
-/* Bid Result Message Styles */
-.bid-result-message {
-  position: fixed;
-  top: 120px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 14px;
-  z-index: 1000;
-  text-align: center;
-  min-width: 300px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  animation: slideDown 0.3s ease-out;
-}
-
-.bid-result-message.success {
-  background: #27ae60;
-  color: white;
-  border: 1px solid #219653;
-}
-
-.bid-result-message.error {
-  background: #e74c3c;
-  color: white;
-  border: 1px solid #c0392b;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-/* Students Section */
-.students-section {
-  /* width:100%; */
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-
-.students-section h2 {
-  color: #333;
-  margin-bottom: 20px;
-  font-size: 1.8rem;
-  border-bottom: 3px solid #667eea;
-  padding-bottom: 10px;
-}
-
-.students-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.student-card {
-  background: #f8f9fa;
-  border: 2px solid #e9ecef;
-  border-radius: 12px;
-  padding: 20px;
-  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 28px;
 }
 
-.student-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-  border-color: #667eea;
+/* ── Section Wrapper ─────────────────────────────────────── */
+.students-section,
+.teachers-section {
+  background: white;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
 }
 
-.student-info h3 {
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 3px solid #667eea;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #222;
+}
+
+.section-badge {
+  background: #667eea;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ── Students Table ──────────────────────────────────────── */
+.students-table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+}
+
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.students-table thead tr {
+  background: #f1f3ff;
+}
+
+.students-table th {
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #555;
+  white-space: nowrap;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.students-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
   color: #333;
-  margin-bottom: 10px;
-  font-size: 1.3rem;
 }
 
-.skills {
+.students-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.students-table tbody tr:hover {
+  background: #f8f9ff;
+}
+
+.students-table tbody tr.row-acquired {
+  opacity: 0.7;
+  background: #fafafa;
+}
+
+.col-num {
+  color: #aaa;
+  font-size: 0.82rem;
+  width: 36px;
+}
+
+.col-name {
+  font-weight: 600;
+  color: #222;
+  white-space: nowrap;
+}
+
+.email-link {
+  color: #667eea;
+  cursor: pointer;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.email-link:hover {
+  text-decoration: underline;
+}
+
+/* Wallet cell */
+.wallet-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wallet-text {
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 0.8rem;
+  color: #555;
+  white-space: nowrap;
+}
+
+.copy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  color: #888;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.copy-btn svg {
+  width: 13px;
+  height: 13px;
+}
+
+.copy-btn:hover {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.copy-btn.copied {
+  background: #28a745;
+  border-color: #28a745;
+  color: white;
+}
+
+/* Skills cell */
+.skills-cell {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 15px;
+  gap: 4px;
 }
 
 .skill-tag {
-  background: #667eea;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 0.8rem;
+  background: #ede9ff;
+  color: #5b4fcf;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
   font-weight: 500;
+  white-space: nowrap;
 }
 
-.bid-info {
-  margin-top: 15px;
-}
-
-.current-teacher {
-  color: #666;
-  margin: 5px 0;
-}
-
-.base-price {
+.skill-more {
+  background: #e9ecef;
   color: #6c757d;
-  font-size: 0.9rem;
-  margin: 5px 0;
+  padding: 3px 7px;
+  border-radius: 10px;
+  font-size: 0.75rem;
 }
 
+.col-price {
+  color: #6c757d;
+  white-space: nowrap;
+}
+
+.col-earned {
+  color: #28a745;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge.available {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge.acquired {
+  background: #f8d7da;
+  color: #721c24;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
+/* Bid button */
 .bid-button {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 7px 16px;
+  border-radius: 7px;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 15px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
 }
 
-.bid-button:hover {
+.bid-button:hover:not(:disabled) {
   transform: scale(1.05);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
-/* Teachers Section */
-.teachers-section {
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+.bid-button.acquired {
+  background: #adb5bd;
+  cursor: not-allowed;
 }
 
-.teachers-section h2 {
-  color: #333;
-  margin-bottom: 20px;
-  font-size: 1.8rem;
-  border-bottom: 3px solid #667eea;
-  padding-bottom: 10px;
-}
-
-.teachers-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-.teacher-card {
-  background: #f8f9fa;
-  border: 2px solid #e9ecef;
-  border-radius: 12px;
-  padding: 20px;
-  transition: all 0.3s ease;
-}
-
-.teacher-card:hover {
-  border-color: #667eea;
-  transform: translateY(-3px);
-}
-
-.teacher-header {
+/* ── Pagination ──────────────────────────────────────────── */
+.pagination {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #dee2e6;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
 }
 
-.teacher-header h3 {
-  color: #333;
-  margin: 0;
+.page-btn {
+  background: white;
+  border: 2px solid #667eea;
+  color: #667eea;
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.teacher-specialization {
-  color: #666;
-  font-size: 0.9rem;
-  text-align:center;
-  background: #e9ecef;
-  border-left: 3px solid #667eea;
+.page-btn:hover:not(:disabled) {
+  background: #667eea;
+  color: white;
+}
+
+.page-btn:disabled {
+  border-color: #dee2e6;
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+
+.page-numbers {
+  display: flex;
+  gap: 4px;
+}
+
+.page-num {
+  background: white;
+  border: 1px solid #dee2e6;
+  color: #555;
+  width: 36px;
+  height: 36px;
+  border-radius: 7px;
+  font-size: 0.88rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.page-num:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.page-num.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: transparent;
+  color: white;
+  font-weight: 700;
+}
+
+.pagination-info {
+  text-align: center;
+  color: #888;
+  font-size: 0.82rem;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+/* ── Teachers List ───────────────────────────────────────── */
+.teachers-list-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.teacher-row {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.teacher-row:last-child {
+  border-bottom: none;
+}
+
+.teacher-row-main {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr 1.4fr;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  transition: background 0.2s;
+}
+
+.teacher-row-main:hover {
+  background: #f8f9ff;
+}
+
+.teacher-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.teacher-col-name {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.teacher-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.teacher-name {
+  font-weight: 600;
+  color: #222;
+  font-size: 0.95rem;
+}
+
+.teacher-spec {
+  font-size: 0.78rem;
+  color: #888;
   font-style: italic;
+}
+
+.col-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #aaa;
+  font-weight: 600;
+}
+
+.teacher-col-email span:last-child {
+  font-size: 0.88rem;
+  color: #444;
 }
 
 .purse-amount {
-  background: #28a745;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
+  background: #d4edda;
+  color: #155724;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  width: fit-content;
+}
+
+.toggle-btn {
+  background: #f1f3ff;
+  border: 1px solid #d0d5f8;
+  color: #667eea;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 0.83rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
 }
 
-.current-holdings h4 {
-  color: #555;
-  margin-bottom: 10px;
-  font-size: 1rem;
+.toggle-btn:hover {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
 }
 
-.holding-item {
-  background: white;
-  padding: 8px 12px;
-  border-radius: 6px;
-  margin-left:-40px;
-  border-left: 4px solid #667eea;
-  border-right: 4px solid #667eea;
-  font-size: 0.9rem;
-  list-style:none;
+.arrow {
+  display: inline-block;
+  font-size: 10px;
+  transition: transform 0.2s;
 }
 
-.no-holdings {
-  color: #6c757d;
-  font-style: italic;
+.arrow.up {
+  transform: rotate(180deg);
+}
+
+/* Acquired sub-list */
+.teacher-acquired-list {
+  background: #fafbff;
+  border-top: 1px solid #eef0fb;
+  padding: 8px 18px;
+}
+
+.acquired-row {
+  display: grid;
+  grid-template-columns: 1.5fr 2fr 1fr;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.875rem;
+  align-items: center;
+}
+
+.acquired-row:last-child {
+  border-bottom: none;
+}
+
+.acquired-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.acquired-email {
+  color: #777;
+  font-size: 0.83rem;
+}
+
+.acquired-balance {
+  color: #28a745;
+  font-weight: 600;
+  font-size: 0.83rem;
+  text-align: right;
+}
+
+.no-acquisitions {
+  padding: 12px 0;
   text-align: center;
-  padding: 20px 0;
+  color: #aaa;
+  font-style: italic;
+  font-size: 0.88rem;
 }
 
-/* Modal Styles */
+/* ── Modal ───────────────────────────────────────────────── */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -534,46 +763,50 @@
   padding: 30px;
   border-radius: 15px;
   width: 90%;
-  max-width: 500px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  max-width: 480px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
 }
 
 .bid-modal h2 {
-  color: #333;
-  margin-bottom: 20px;
+  color: #222;
+  margin-bottom: 18px;
   text-align: center;
+  font-size: 1.3rem;
 }
 
 .bid-details {
   background: #f8f9fa;
-  padding: 15px;
+  padding: 14px;
   border-radius: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .bid-details p {
-  margin: 8px 0;
+  margin: 7px 0;
   color: #555;
+  font-size: 0.9rem;
 }
 
 .bid-input-group {
-  margin-bottom: 25px;
+  margin-bottom: 22px;
 }
 
 .bid-input-group label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
   font-weight: 600;
   color: #333;
+  font-size: 0.9rem;
 }
 
 .bid-input-group input {
   width: 100%;
-  padding: 12px;
+  padding: 11px 12px;
   border: 2px solid #ddd;
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
 }
 
 .bid-input-group input:focus {
@@ -583,7 +816,7 @@
 
 .modal-actions {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   justify-content: flex-end;
 }
 
@@ -591,11 +824,11 @@
   background: #6c757d;
   color: white;
   border: none;
-  padding: 12px 24px;
+  padding: 10px 22px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  transition: background 0.2s;
 }
 
 .cancel-btn:hover {
@@ -606,328 +839,61 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  padding: 12px 24px;
+  padding: 10px 22px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.2s;
 }
 
 .confirm-bid-btn:hover:not(:disabled) {
-  transform: scale(1.05);
+  transform: scale(1.04);
   box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
 .confirm-bid-btn:disabled {
-  background: #6c757d;
+  background: #adb5bd;
   cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
 }
 
-/* Acquired Students Dropdown Styles */
-.acquired-students-dropdown {
-  margin-top: 15px;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.dropdown-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 15px;
-  background: #f8f9fa;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  border-bottom: 1px solid transparent;
-}
-
-.dropdown-header:hover {
-  background: #e9ecef;
-}
-
-.dropdown-title {
-  font-weight: 600;
-  color: #333;
-  font-size: 0.95rem;
-}
-
-.dropdown-arrow {
-  color: #6c757d;
-  font-size: 12px;
-  transition: transform 0.2s ease;
-}
-
-.dropdown-arrow.expanded {
-  transform: rotate(180deg);
-}
-
-.dropdown-content {
-  background: white;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.acquired-students-list {
-  padding: 10px 0;
-}
-
-.acquired-student-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 15px;
-  border-bottom: 1px solid #f8f9fa;
-  transition: background-color 0.2s ease;
-}
-
-.acquired-student-item:last-child {
-  border-bottom: none;
-}
-
-.acquired-student-item:hover {
-  background-color: #f8f9fa;
-}
-
-.student-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.student-name {
-  font-weight: 500;
-  color: #333;
-  font-size: 0.9rem;
-}
-
-/* Student Email and Wallet Address Styles */
-.student-email {
-  color: #666;
-  font-size: 0.9rem;
-  margin: 0.25rem 0;
-  cursor: pointer;
-  transition: color 0.3s ease;
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  background-color: #f5f5f5;
-  width: fit-content;
-}
-
-.student-email:hover {
-  color: #007bff;
-  background-color: #e8f0fe;
-  text-decoration: underline;
-}
-
-.student-email:active {
-  transform: scale(0.98);
-}
-
-/* Wallet Address Container */
-.student-wallet-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: #f8f9fa;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 0.5rem 0.75rem;
-  margin: 0.5rem 0;
-  transition: all 0.3s ease;
-  max-width: 100%;
-  overflow: hidden;
-}
-
-.student-wallet-container:hover {
-  border-color: #007bff;
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
-}
-
-.student-walletaddress {
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 0.85rem;
-  color: #495057;
-  margin: 0;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Copy Button */
-.copy-wallet-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: transparent;
-  border: 1px solid #ced4da;
-  border-radius: 6px;
-  padding: 0.4rem 0.8rem;
-  font-size: 0.8rem;
-  color: #6c757d;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 70px;
-  white-space: nowrap;
-  gap: 0.25rem;
-}
-
-.copy-wallet-btn:hover {
-  background-color: #007bff;
-  border-color: #007bff;
-  color: white;
-}
-
-.copy-wallet-btn.copied {
-  background-color: #28a745;
-  border-color: #28a745;
-  color: white;
-}
-
-.copy-wallet-btn svg {
-  width: 14px;
-  height: 14px;
-}
-
-.copy-wallet-btn:active {
-  transform: scale(0.95);
-}
-
-/* Mobile Responsive Styles */
-@media (max-width: 768px) {
-  .student-email {
-    font-size: 0.85rem;
-    padding: 0.2rem 0.4rem;
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .teacher-row-main {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
 
-  .student-wallet-container {
-    padding: 0.4rem 0.6rem;
-    gap: 0.3rem;
+  .acquired-row {
+    grid-template-columns: 1fr 1fr;
   }
 
-  .student-walletaddress {
-    font-size: 0.75rem;
-    max-width: 150px;
+  .acquired-balance {
+    text-align: left;
+  }
+}
+
+@media (max-width: 700px) {
+  .students-table th:nth-child(4),
+  .students-table td:nth-child(4) {
+    display: none;
   }
 
-  .copy-wallet-btn {
-    padding: 0.3rem 0.6rem;
-    font-size: 0.7rem;
-    min-width: 60px;
+  .teacher-row-main {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 480px) {
-  .student-wallet-container {
-    flex-wrap: wrap;
-  }
-
-  .student-walletaddress {
-    max-width: 100%;
-    width: 100%;
-    margin-bottom: 0.3rem;
-  }
-
-  .copy-wallet-btn {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-/* For very small screens */
-@media (max-width: 320px) {
-  .student-email {
-    font-size: 0.75rem;
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-/* Dark mode support (optional) */
-@media (prefers-color-scheme: dark) {
-  .student-email {
-    background-color: #2d2d2d;
-    color: #e0e0e0;
-  }
-
-  .student-email:hover {
-    background-color: #3d3d3d;
-    color: #66b0ff;
-  }
-
-  .student-wallet-container {
-    background-color: #2d2d2d;
-    border-color: #404040;
-  }
-
-  .student-walletaddress {
-    color: #e0e0e0;
-  }
-
-  .copy-wallet-btn {
-    background-color: #3d3d3d;
-    border-color: #505050;
-    color: #e0e0e0;
-  }
-}
-
-.student-price {
-  font-weight: 600;
-  color: #28a745;
-  font-size: 0.9rem;
-}
-
-.no-acquisitions {
-  padding: 20px;
-  text-align: center;
-  color: #6c757d;
-  font-style: italic;
-  font-size: 0.9rem;
-}
-
-/* Scrollbar styling */
-.dropdown-content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.dropdown-content::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.dropdown-content::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 3px;
-}
-
-.dropdown-content::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .bidding-container {
-    grid-template-columns: 1fr;
-  }
-  
-  .students-grid,
-  .teachers-list {
-    grid-template-columns: 1fr;
-  }
-  
-  .bidding-header h1 {
-    font-size: 2rem;
-  }
-  
   .modal-actions {
     flex-direction: column;
   }
-  
+
   .modal-actions button {
     width: 100%;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
   }
 }
