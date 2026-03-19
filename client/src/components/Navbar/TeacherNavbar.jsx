@@ -40,18 +40,18 @@ export default function TeacherNavbar({
   // If no teacher is logged in, don't render the navbar with profile
   if (!storedTeacher) {
     return (
-      <nav className="navbar">
-        <div className="navbar-brand">
-          <div className="navbar-logo">YARCoin</div>
+      <nav className="teacher-navbar">
+        <div className="teacher-navbar-brand">
+          <div className="teacher-navbar-logo">YARCoin</div>
         </div>
       </nav>
     );
   }
 
   return (
-    <nav className="navbar">
-      <div className="navbar-brand">
-        <div className="navbar-logo">YARCoin</div>
+    <nav className="teacher-navbar">
+      <div className="teacher-navbar-brand">
+        <div className="teacher-navbar-logo">YARCoin</div>
         <button 
           className="mobile-menu-btn"
           onClick={toggleMobileMenu}
@@ -62,10 +62,10 @@ export default function TeacherNavbar({
         </button>
       </div>
 
-      <div className="navbar-desktop">
+      <div className="teacher-navbar-desktop">
         <div className="profile-container" ref={profileRef}>
-          <button className="profile-btn" onClick={toggleProfile}>
-            <div className="profile-icon">👤</div>
+          <button className="teacher-profile-btn" onClick={toggleProfile}>
+            <div className="teacher-profile-icon">👤</div>
             <span>{storedTeacher.name}</span>
           </button>
 

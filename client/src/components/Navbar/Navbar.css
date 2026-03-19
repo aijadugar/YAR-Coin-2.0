@@ -1,9 +1,8 @@
-body {
+/* body {
   margin: 0;
   padding: 0;
   font-family: "Helvetica Neue", Arial, sans-serif;
-  overflow-x: hidden;
-}
+} */
 
 div.bid-item{
   color:black;
@@ -137,7 +136,7 @@ div.bid-item{
   font-weight: 600;
 }
 
-.dropdown-logout-btn, .penalty-history-btn {
+.dropdown-logout-btn, .penalty-history-btn, .nft-history-btn {
   width: 100%;
   margin-top: 1.2rem;
   border: none;
@@ -157,7 +156,16 @@ div.bid-item{
   background: #2ecc71;
 }
 
+.nft-history-btn{
+  background: rgb(5, 217, 240);
+}
+
 .penalty-history-btn a{
+  text-decoration: none;
+  color:inherit;
+}
+
+.nft-history-btn a{
   text-decoration: none;
   color:inherit;
 }
@@ -165,6 +173,11 @@ div.bid-item{
 .penalty-history-btn:hover{
   transform: translateY(-2px);
   box-shadow: 0 8px 15px rgba(99, 242, 3, 0.3);
+}
+
+.nft-history-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(67, 189, 208, 0.3);
 }
 
 button.navbar-dashboard-btn,

@@ -1,27 +1,24 @@
-.navbar {
+.teacher-navbar {
   height: 70px;
-  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-
-  background: linear-gradient(135deg, #5f6ad4, #7a5fd4);
-  color: white;
-
+  background: #2c3e50;
+  color: #fff;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
-.navbar-brand {
+.teacher-navbar-brand {
   display: flex;
   align-items: center;
-  gap: 1rem;
 }
 
-.navbar-logo {
+.teacher-navbar-logo {
   font-size: 1.6rem;
   font-weight: 700;
   letter-spacing: 1px;
@@ -43,16 +40,18 @@
   background: white;
 }
 
-.navbar-desktop {
+.teacher-navbar-desktop {
   display: flex;
   align-items: center;
+  gap: 1.5rem;
 }
 
 .profile-container {
   position: relative;
+  right:70px;
 }
 
-.profile-btn {
+.teacher-profile-btn {
   display: flex;
   align-items: center;
   gap: 0.6rem;
@@ -62,14 +61,16 @@
   border: 1px solid rgba(255,255,255,0.2);
   color: white;
   cursor: pointer;
-  transition: 0.3s ease;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-left:40px;
 }
 
-.profile-btn:hover {
+.teacher-profile-btn:hover {
   background: rgba(255, 255, 255, 0.25);
 }
 
-.profile-icon {
+.teacher-profile-icon {
   width: 35px;
   height: 35px;
   border-radius: 50%;

@@ -146,7 +146,7 @@ export default function Navbar({
                 </Link>
               </button>
 
-              <button className="penalty-history-btn">
+              <button className="nft-history-btn">
                 <Link to="/nfthistory">
                   View NFT History
                 </Link>
