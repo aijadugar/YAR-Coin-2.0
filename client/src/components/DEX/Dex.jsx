@@ -10,24 +10,20 @@ export default function Dex() {
   const [loading, setLoading] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [transactions, setTransactions] = useState([]);
-
   const walletAddress = localStorage.getItem("walletAddress");
 
-  // 🔥 Fetch Transactions when History opens
+
   useEffect(() => {
-
-
-
     const fetchTransactions = async () => {
-      if (!walletAddress || !showHistory) return;
+      if (!walletAddress || !showHistory){
+        return
+      };
 
       const baseUrl = import.meta.env.VITE_BASE_URL;
+      const url = `${baseUrl}/dex/transactions/${walletAddress}`;
 
       try {
-        const response = await fetch(
-          `${baseUrl}/transactions/${walletAddress}`
-        );
-
+        const response = await fetch(url);
         const data = await response.json();
 
         if (data.success) {
@@ -35,7 +31,7 @@ export default function Dex() {
         }
 
       } catch (error) {
-        console.error("Failed to fetch transactions:", error);
+        console.error("Fetch error:", error);
       }
     };
 
@@ -90,16 +86,15 @@ export default function Dex() {
       return;
     }
 
-    // ✅ 2️⃣ CHECK ALLOWANCE
+    // CHECK ALLOWANCE
     const currentAllowance = await yarToken.allowance(userAddress, DEX_ADDRESS);
 
     if (currentAllowance < amount) {
       const approveTx = await yarToken.approve(DEX_ADDRESS, amount);
       await approveTx.wait();
-      console.log("Approved!");
     }
 
-    // ✅ 3️⃣ CONVERT
+    // CONVERT
     const convertTx = await dex.convertYARtoUSD(amount);
     const receipt = await convertTx.wait();
 
@@ -108,9 +103,9 @@ export default function Dex() {
       return;
     }
 
-    console.log("Converted!", convertTx.hash);
+    // console.log("Converted!", convertTx.hash);
 
-    // ✅ 4️⃣ BACKEND CALL
+    //BACKEND CALL
     const baseUrl = import.meta.env.VITE_BASE_URL;
 
     const response = await fetch(`${baseUrl}/dex/convert`, {
@@ -187,7 +182,10 @@ export default function Dex() {
           <button
             type="button"
             className="history-btn"
-            onClick={() => setShowHistory(!showHistory)}
+            onClick={ () => {
+               setShowHistory(!showHistory)
+            }
+            }
           >
             {showHistory ? "Close History" : "Transaction History"}
           </button>

@@ -10,10 +10,8 @@
 .playground-search-bar {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  max-width: 1100px;
-  margin: 0 auto 1rem;
-  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
 }
 
 .search-wrapper {
@@ -35,25 +33,24 @@
 
 .playground-search-input {
   width: 100%;
-  padding: 0.75rem 2.8rem 0.75rem 2.6rem;
-  border-radius: 12px;
-  border: 2px solid rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(10px);
-  color: white;
-  font-size: 0.95rem;
-  outline: none;
+  padding: 10px 36px 10px 36px;
+  border: 2px solid #e0e3f0;
+  border-radius: 9px;
+  font-size: 0.9rem;
+  color: #333;
   transition: border-color 0.2s;
+  background: #f8f9ff;
   box-sizing: border-box;
 }
 
 .playground-search-input::placeholder {
-  color: rgba(255,255,255,0.6);
+  color: #bbb;
 }
 
 .playground-search-input:focus {
-  border-color: rgba(255,255,255,0.6);
-  background: rgba(255,255,255,0.2);
+  outline: none;
+  border-color: #667eea;
+  background: white;
 }
 
 .search-clear {
@@ -74,33 +71,34 @@
   color: white;
 }
 
-.search-filter-dropdown {
-  padding: 0.75rem 1.2rem;
-  border-radius: 12px;
-  border: 2px solid rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(10px);
-  color: white;
-  font-size: 0.95rem;
+.playground-filter-dropdown {
+  padding: 10px 14px;
+  border: 2px solid #e0e3f0;
+  border-radius: 9px;
+  font-size: 0.88rem;
   font-weight: 600;
+  color: #444;
+  background: #f8f9ff;
   cursor: pointer;
-  outline: none;
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.2s;
   appearance: none;
   -webkit-appearance: none;
-  padding-right: 2.2rem;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 0.8rem center;
+  background-position: right 10px center;
+  padding-right: 32px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.search-filter-dropdown option {
-  background: #4f46e5;
-  color: white;
+.playground-filter-dropdown option {
+  background: white;
+  color: black;
 }
 
-.search-filter-dropdown:focus {
-  border-color: rgba(255,255,255,0.6);
+.playground-filter-dropdown:focus {
+  outline: none;
+  border-color: #667eea;
 }
 
 .results-count {
@@ -581,11 +579,12 @@
   }
 
   .playground-search-bar {
-    flex-direction: column;
+    flex-direction: column; 
     align-items: stretch;
   }
 
-  .search-filter-dropdown {
+
+  .playground-filter-dropdown {
     width: 100%;
   }
 

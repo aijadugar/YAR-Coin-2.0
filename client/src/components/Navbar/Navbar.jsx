@@ -128,7 +128,7 @@ export default function Navbar({
                 <span>{storedUser.yarBalance}</span>
               </div>
 
-              <button className="dashboard-btn">
+              <button className="navbar-dashboard-btn">
                 <Link to="/student-workspace">
                   Team Workspace
                 </Link>

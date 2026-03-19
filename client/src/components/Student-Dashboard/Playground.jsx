@@ -398,7 +398,7 @@ const Playground = () => {
                       <span className="row-label">Acquired By</span>
                       <div className="acquisition-details">
                         <span className="teacher-name">{student.currentTeacher}</span>
-                        <span className="acquisition-value">for {student.currentBid} YARC</span>
+                        {/* <span className="acquisition-value">for {student.currentBid} YARC</span> */}
                       </div>
                     </div>
                   )}

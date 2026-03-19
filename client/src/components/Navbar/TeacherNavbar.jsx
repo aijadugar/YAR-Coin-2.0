@@ -99,7 +99,7 @@ export default function TeacherNavbar({
                 </Link>
               </button>
 
-              <button className="penalty-btn">
+              {/* <button className="penalty-btn">
                 <Link to="/penalty">
                   Penalty
                 </Link>
@@ -109,7 +109,7 @@ export default function TeacherNavbar({
                 <Link to="/nft">
                   Grant Achievement
                 </Link>
-              </button>
+              </button> */}
 
               <button 
                 className="dropdown-logout-btn" 

@@ -7,7 +7,7 @@
   min-height: 100vh;
   padding: 2rem;
   position: relative;
-  background-color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .nft-container {
@@ -62,6 +62,7 @@
   background: white;
   width: 100%;
   box-sizing: border-box;
+  color:black;
 }
 
 .nft-card input:focus,
@@ -169,7 +170,7 @@
 /* Placeholder styling */
 .nft-card input::placeholder,
 .nft-card textarea::placeholder {
-  color: #aaa;
+  color: black;
   opacity: 0.7;
   font-style: italic;
 }

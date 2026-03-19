@@ -227,15 +227,24 @@ const TeacherHome = () => {
   };
 
   const getFilteredTeachers = () => {
-    if (!searchQuery.trim()) return teachers;
-    const q = searchQuery.toLowerCase();
-    return teachers.filter(
-      (t) =>
-        t.name?.toLowerCase().includes(q) ||
-        t.email?.toLowerCase().includes(q) ||
-        t.specialization?.toLowerCase().includes(q)
+  if (!searchQuery.trim()) return teachers;
+  const q = searchQuery.toLowerCase();
+
+  return teachers.filter((t) => {
+    const name = t.name?.toLowerCase() || "";
+    const email = t.email?.toLowerCase() || "";
+
+    const specialization = Array.isArray(t.specialization)
+      ? t.specialization.join(" ").toLowerCase()
+      : "";
+
+    return (
+      name.includes(q) ||
+      email.includes(q) ||
+      specialization.includes(q)
     );
-  };
+  });
+};
 
   const filteredStudents = getFilteredStudents();
   const totalStudentPages = Math.ceil(filteredStudents.length / STUDENTS_PER_PAGE);
@@ -459,7 +468,7 @@ const TeacherHome = () => {
                                       })
                                     }
                                   >
-                                    Grant Achievement
+                                    Mint NFT
                                   </button>
                                 </td>
                               )}

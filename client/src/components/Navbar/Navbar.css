@@ -166,7 +166,7 @@ div.bid-item{
   box-shadow: 0 8px 15px rgba(99, 242, 3, 0.3);
 }
 
-button.dashboard-btn,
+button.navbar-dashboard-btn,
 button.dex-btn {
   width: 48%;
   padding: 0.65rem;
@@ -179,9 +179,13 @@ button.dex-btn {
 }
 
 /* Yellow Button */
-button.dashboard-btn {
+button.navbar-dashboard-btn {
   background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  color: #1f2937;
+}
+
+button.navbar-dashboard-btn a{
+  text-decoration: none;
+  color:white;
 }
 
 /* Blue Button */
