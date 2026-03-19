@@ -90,7 +90,7 @@ export default function TeacherNavbar({
 
               <div className="profile-item">
                 <span>Yarc Balance:</span>
-                <span>{storedTeacher.yarBalance || storedTeacher.purse || 0}</span>
+                <span>{storedTeacher.yarBalance ?? storedTeacher.purse ?? 0}</span>
               </div>
 
               <button className="dashboard-btn">

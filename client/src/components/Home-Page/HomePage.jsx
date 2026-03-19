@@ -38,7 +38,7 @@ export default function HomePage() {
   }, [location]);
 
   const handleEnterPlayground = () => {
-    const isLoggedIn = localStorage.getItem("userEmail") || localStorage.getItem("username");
+    const isLoggedIn = localStorage.getItem("userEmail");
     const role = localStorage.getItem("userRole"); 
     
     if (isLoggedIn) {

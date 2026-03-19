@@ -128,7 +128,7 @@
   justify-content: space-between;
 }
 
-.input-group {
+.name-fields .input-group {
   flex: 1;
   margin-bottom: 0;
 }

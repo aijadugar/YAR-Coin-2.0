@@ -66,13 +66,7 @@ export default function Auth() {
     }
 
     try {
-      if (role === "teacher") {
-        showMessage("Setting up your wallet...", "success");
-      }
-      else {
-        showMessage("Setting up your wallet...", "success");
-      }
-
+      showMessage("Setting up your wallet...", "success");
 
       const approved = await approveYAR();
       if (!approved) {
@@ -136,7 +130,9 @@ export default function Auth() {
       setWalletAddress("");
 
     } catch (err) {
-      console.error("Error:", err);
+       if (import.meta.env.VITE_BASE_URL) {
+         console.error("Error:", err);
+       }
       showMessage("Failed to connect to backend", "error");
     } finally {
       setIsLoading(false);
@@ -196,7 +192,9 @@ export default function Auth() {
       }, 1000);
 
     } catch (err) {
-      console.error("Error:", err);
+      if (import.meta.env.VITE_BASE_URL) {
+        console.error("Error:", err);
+      }
       showMessage("Failed to connect to backend", "error");
     } finally {
       setIsLoading(false);
@@ -274,6 +272,7 @@ export default function Auth() {
                 onChange={handleLoginChange}
                 required
                 disabled={isLoading}
+                readOnly
               />
             </div>
 
