@@ -12,6 +12,7 @@ export default function Auth() {
   const [isLoading, setIsLoading] = useState(false); 
   const [message, setMessage] = useState({ text: "", type: "" }); 
   const [walletAddress, setWalletAddress] = useState("");
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
   const navigate = useNavigate();
 
   const [studentFormData, setStudentFormData] = useState({
@@ -33,11 +34,6 @@ export default function Auth() {
 
   const handleTeacherChange = (e) => {
     setTeacherFormData({ ...teacherFormData, [e.target.name]: e.target.value });
-    if (message.text) setMessage({ text: "", type: "" });
-  };
-
-  const handleLoginChange = (e) => {
-    setLoginData({ ...loginData, [e.target.name]: e.target.value });
     if (message.text) setMessage({ text: "", type: "" });
   };
 
@@ -63,6 +59,92 @@ export default function Auth() {
       showMessage("Please connect your wallet first", "error");
       setIsLoading(false);
       return;
+    }
+
+    if (role === "student"){
+      if(studentFormData.name.trim().length === 0){
+        showMessage("Name cannot be empty","error");
+        setIsLoading(false);
+        return;
+      }
+
+      const nameRegex = /^[a-zA-Z\s]+$/;
+      if(!nameRegex.test(studentFormData.name.trim())){
+        showMessage("Name can only contain letters and spaces", "error");
+        setIsLoading(false);
+        return;
+      }
+
+      if(studentFormData.email.length === 0){
+        showMessage("Student!, Email cannot be empty","error");
+        setIsLoading(false);
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if(!emailRegex.test(studentFormData.email)){
+        showMessage("Invalid email address","error");
+        setIsLoading(false);
+        return;
+      }
+
+      const skillsArr = studentFormData.skills.split(',').map(s => s.trim()).filter(s => s);
+      if (skillsArr.length === 0) {
+        showMessage("Please enter at least one skill", "error");
+        setIsLoading(false);
+        return;
+      }
+
+      const achievementsArr = studentFormData.achievements.split(',').map(a => a.trim()).filter(a => a);
+      if (achievementsArr.length === 0) {
+        showMessage("Please enter at least one achievement", "error");
+        setIsLoading(false);
+        return;
+      }
+
+      const price = parseInt(studentFormData.basePrice);
+      if (isNaN(price) || price <= 0) {
+        showMessage("Base Price must be a number greater than 0", "error");
+        setIsLoading(false);
+        return;
+      }
+    }
+    else if (role === "teacher"){
+      if (teacherFormData.name.trim().length === 0){
+        showMessage("Name cannot be empty", "error");
+        setIsLoading(false);
+        return;
+      }
+
+      const nameRegex = /^[a-zA-Z\s]+$/;
+      if(!nameRegex.test(teacherFormData.name.trim())){
+        showMessage("Name can only contain letters and spaces", "error");
+        setIsLoading(false);
+        return;
+      }
+
+      if(teacherFormData.email.length === 0){
+        showMessage("Email cannot be empty","error");
+        setIsLoading(false);
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(teacherFormData.email)) {
+        showMessage("Invalid email address", "error");
+        setIsLoading(false);
+        return;
+      }
+
+      if (teacherFormData.specialization.trim().length === 0) {
+      showMessage("Specialization cannot be empty", "error");
+      setIsLoading(false);
+      return;
+    }
+
+
+
+
     }
 
     try {
@@ -139,82 +221,80 @@ export default function Auth() {
     }
   };
  
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      const res = await fetch(`${baseUrl}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: loginData.email,
-          walletAddress: loginData.walletAddress
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        showMessage("Error: " + (data.error || "Login failed"), "error");
-        return;
-      }
-
-      const user = data.user;
-      const userRole = data.role;
-
-      localStorage.setItem("userEmail", user.email);
-      localStorage.setItem("userName", user.name);
-      localStorage.setItem("userRole", userRole);
-      localStorage.setItem("userId", user._id);
-
-      if (user.walletAddress) {
-        localStorage.setItem("walletAddress", user.walletAddress);
-      }
-
-      showMessage("Login successful! Redirecting...", "success");
-
-      setTimeout(() => {
-        if (userRole === 'teacher') {
-          navigate("/teacher-home", {
-            state: {
-              ...user,
-              role: 'teacher'
-            }
-          });
-        } else {
-          navigate("/student/playground", {
-            state: {
-              ...user,
-              role: 'student'
-            }
-          });
-        }
-      }, 1000);
-
-    } catch (err) {
-      if (import.meta.env.VITE_BASE_URL) {
-        console.error("Error:", err);
-      }
-      showMessage("Failed to connect to backend", "error");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleLoginWalletConnect = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  setIsLoading(true);
 
+  try {
+    // 1. Connect wallet
     const address = await connectWallet();
 
-    if (address) {
-      setLoginData({
-        ...loginData,
-        walletAddress: address
-      });
-
-      showMessage("Wallet connected successfully", "success");
+    if (!address) {
+      showMessage("Wallet connection failed", "error");
+      return;
     }
-  };
+
+    setIsWalletConnected(true);
+
+    setLoginData((prev) => ({
+      ...prev,
+      walletAddress: address
+    }));
+
+    showMessage("Wallet connected. Logging in...", "success");
+
+    // 2. Call backend login
+    const res = await fetch(`${baseUrl}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        walletAddress: address
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      showMessage("Error: " + (data.error || "Login failed"), "error");
+      return;
+    }
+
+    const user = data.user;
+    const userRole = data.role;
+
+    // 3. Save data
+    localStorage.setItem("userEmail", user.email);
+    localStorage.setItem("userName", user.name);
+    localStorage.setItem("userRole", userRole);
+    localStorage.setItem("userId", user._id);
+
+    if (user.walletAddress) {
+      localStorage.setItem("walletAddress", user.walletAddress);
+    }
+
+    showMessage("Login successful! Redirecting...", "success");
+
+    // 4. Redirect
+    setTimeout(() => {
+      if (userRole === "teacher") {
+        navigate("/teacher-home", {
+          state: { ...user, role: "teacher" }
+        });
+      } else {
+        navigate("/student/playground", {
+          state: { ...user, role: "student" }
+        });
+      }
+    }, 1000);
+
+  } catch (err) {
+    console.error(err);
+    showMessage("Failed to connect", "error");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const getCurrentFormData = () => {
     return role === "student" ? studentFormData : teacherFormData;
@@ -260,39 +340,32 @@ export default function Auth() {
         )}
 
         {tab === "login" && (
-          <form className="auth-form" onSubmit={handleLogin}>
+          <form className="auth-form">
 
+          {isWalletConnected && (
             <div className="input-group">
               <label>Wallet Address</label>
               <input
                 type="text"
-                name="walletAddress"
-                placeholder="Enter your wallet address"
                 value={loginData.walletAddress}
-                onChange={handleLoginChange}
-                required
-                disabled={isLoading}
                 readOnly
               />
             </div>
+          )}
 
             <p className="signup-text">
               Don't have an account?{" "}
               <span onClick={() => !isLoading && setTab("register")}>Sign up</span>
             </p>
 
-            <button type="submit" disabled={isLoading} className="login-btn">
-              {isLoading ? "Signing In..." : "Login to YARCoin"}
-            </button>
-
             <button
-              type="button"
-              className="metamask-btn"
-              onClick={handleLoginWalletConnect}>
-              Login with Wallet
-            </button>
-
-
+            type="button"
+            className="metamask-btn"
+            onClick={handleLoginWalletConnect}
+            disabled={isLoading}
+          >
+            {isLoading ? "Connecting..." : "Connect Wallet & Login"}
+          </button>
           </form>
         )}
 
@@ -306,7 +379,6 @@ export default function Auth() {
                 placeholder={`Enter your name`}
                 value={getCurrentFormData().name}
                 onChange={getCurrentHandleChange()}
-                required
                 disabled={isLoading}
               />
             </div>
@@ -319,7 +391,6 @@ export default function Auth() {
                 placeholder="Enter your email"
                 value={getCurrentFormData().email}
                 onChange={getCurrentHandleChange()}
-                required
                 disabled={isLoading}
               />
             </div>
@@ -334,7 +405,6 @@ export default function Auth() {
                     placeholder="e.g., React, Node.js, Blockchain"
                     value={studentFormData.skills}
                     onChange={handleStudentChange}
-                    required
                     disabled={isLoading}
                   />
                 </div>
@@ -347,7 +417,6 @@ export default function Auth() {
                     placeholder="e.g., Hackathon Winner, Open Source Contributor"
                     value={studentFormData.achievements}
                     onChange={handleStudentChange}
-                    required
                     disabled={isLoading}
                   />
                 </div>
@@ -360,9 +429,7 @@ export default function Auth() {
                     placeholder="Enter your base price"
                     value={studentFormData.basePrice}
                     onChange={handleStudentChange}
-                    required
                     disabled={isLoading}
-                    min="1"
                   />
                 </div>
               </>
@@ -375,7 +442,6 @@ export default function Auth() {
                   placeholder="e.g., Machine Learning, Web Development"
                   value={teacherFormData.specialization}
                   onChange={handleTeacherChange}
-                  required
                   disabled={isLoading}
                 />
               </div>
