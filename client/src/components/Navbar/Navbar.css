@@ -78,9 +78,11 @@ div.bid-item{
   right: 0;
   width: 320px;
   padding: 1.5rem;
-  background: #2c3e50;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  background: rgba(23, 10, 45, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-Filter: blur(16px);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
   animation: fadeIn 0.2s ease-in-out;
   z-index: 999;
 }

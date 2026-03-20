@@ -1,6 +1,6 @@
 .home-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #3D0F5C;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -23,6 +23,7 @@
   gap: 4rem;
   align-items: center;
   width: 100%;
+  background:#3D0F5C;
 }
 
 .hero-content {
@@ -51,7 +52,7 @@
   font-weight: 800;
   line-height: 1.2;
   margin-bottom: 1.5rem;
-  color: white;
+  color: #F5F5F5;
 }
 
 .gradient-text {
@@ -74,6 +75,8 @@
   margin-bottom: 2.5rem;
   opacity: 0.9;
   max-width: 600px;
+  color: rgb(181, 169, 169);
+  
 }
 
 .hero-cta {
@@ -84,7 +87,7 @@
 }
 
 .primary-cta {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+  background: #FFA000;
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -349,15 +352,16 @@
 
 .floating-card {
   position: absolute;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
   padding: 1.2rem;
   border-radius: 15px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   animation: float 8s infinite ease-in-out;
   min-width: 200px;
   z-index: 3;
+  color:white;
 }
 
 .card-badge {
@@ -411,7 +415,7 @@
 
 .teacher-avatar {
   font-size: 1.5rem;
-  color: #667eea;
+  color: #8b8c91;
 }
 
 .teacher-info {
@@ -419,15 +423,15 @@
   flex-direction: column;
 }
 
-.teacher-name {
+span.teacher-name {
   font-weight: 700;
   font-size: 0.9rem;
-  color: #333;
+  color:#FFFFFF;
 }
 
 .subject {
   font-size: 0.75rem;
-  color: #666;
+  color: #ffffff;
   margin-top: 0.1rem;
 }
 
@@ -439,7 +443,7 @@
 
 .current-bid {
   font-size: 0.7rem;
-  color: #888;
+  color: #ffffff;
   font-weight: 600;
 }
 
@@ -450,7 +454,7 @@
 
 .bid-student {
   font-size: 0.8rem;
-  color: #666;
+  color: #ffffff;
 }
 
 .auction-hammer {
