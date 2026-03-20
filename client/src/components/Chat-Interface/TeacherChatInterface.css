@@ -1,11 +1,9 @@
-/* Page Layout */
 .chat-page {
   display: flex;
   height: 100vh;
   font-family: Arial, sans-serif;
 }
 
-/* Teacher Sidebar - Modified for students only */
 .teacher-sidebar {
   width: 300px;
   background: #0f2027;
@@ -81,7 +79,6 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* Student Container */
 .student-container {
   margin: 8px 12px;
   background: rgba(255, 255, 255, 0.05);
@@ -115,7 +112,6 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* GitHub Graph Container */
 .github-graph-container {
   padding: 15px;
   background: rgba(0, 0, 0, 0.2);
@@ -153,7 +149,6 @@
   margin: 0;
 }
 
-/* Style for when actual graph is loaded */
 .github-graph-container iframe,
 .github-graph-container img,
 .github-graph-container .github-graph-embed {
@@ -178,7 +173,6 @@
   background: #0d6efd;
 }
 
-/* Chat Container */
 .chat-container {
   flex: 1;
   display: flex;
@@ -189,12 +183,10 @@
   margin-left: 0;
 }
 
-/* When sidebar is open */
 .chat-container.shifted {
   margin-left: 350px; 
 }
 
-/* Header */
 .chat-header {
   display: flex;
   align-items: center;
@@ -214,7 +206,6 @@
   color: white;
 }
 
-/* Messages */
 .chat-messages {
   flex: 1;
   padding: 20px;
@@ -223,7 +214,6 @@
   flex-direction: column;
 }
 
-/* Message Bubble */
 .message {
   max-width: 40%;
   padding: 10px 15px;
@@ -246,7 +236,6 @@
   align-self: flex-end;
 }
 
-/* Input Section */
 .chat-input-section {
   display: flex;
   justify-content: center;
@@ -296,7 +285,6 @@
   width: 350px;
 }
 
-/* Scrollbar styling for sidebar */
 .teacher-sidebar::-webkit-scrollbar {
   width: 6px;
 }
@@ -314,14 +302,10 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* Animation for dropdown */
 .github-graph-container {
   animation: slideDown 0.3s ease;
 }
 
-/* Add these styles to your existing TeacherChatInterface.css */
-
-/* Connection status */
 .connection-status {
   font-size: 12px;
   padding: 4px 8px;
@@ -339,7 +323,6 @@
   color: #6bff6b;
 }
 
-/* No messages placeholder */
 .no-messages {
   display: flex;
   justify-content: center;
@@ -349,7 +332,6 @@
   font-style: italic;
 }
 
-/* Message timestamp */
 .message-timestamp {
   font-size: 10px;
   margin-top: 4px;
@@ -365,7 +347,6 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* Disabled input and button states */
 .chat-input-section input:disabled,
 .chat-input-section button:disabled {
   opacity: 0.5;
@@ -377,7 +358,6 @@
   transform: none;
 }
 
-/* Improved message content */
 .message-content {
   word-wrap: break-word;
 }
@@ -386,40 +366,7 @@
   to { transform: rotate(360deg); }
 }
 
-/* Error Container */
-.error-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background: linear-gradient(to right, #203a43, #2c5364);
-  color: white;
-}
 
-.error-message {
-  background: rgba(255, 0, 0, 0.2);
-  padding: 15px 30px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  border: 1px solid rgba(255, 0, 0, 0.3);
-}
-
-.retry-btn {
-  padding: 10px 20px;
-  background: #1e90ff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.retry-btn:hover {
-  background: #0d6efd;
-}
-
-/* No Students */
 .no-students {
   padding: 20px;
   text-align: center;
@@ -427,15 +374,6 @@
   font-style: italic;
 }
 
-/* User Info */
-.user-info {
-  font-size: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 4px 8px;
-  border-radius: 4px;
-  margin-left: 10px;
-  color: #1e90ff;
-}
 
 @keyframes slideDown {
   from {
@@ -451,8 +389,9 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .teacher-sidebar {
-    width: 280px;
+    width: 350px;
   }
+
   
   .message {
     max-width: 70%;

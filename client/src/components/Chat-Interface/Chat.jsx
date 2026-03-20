@@ -8,19 +8,15 @@ function Chat({ user }) {
 
   useEffect(() => {
     if (!user) return;
-
-    // Join room
     socket.emit("joinRoom", {
       userId: user._id,
-      role: user.role // "admin" or "member"
+      role: user.role 
     });
 
-    // Load old messages
     socket.on("previousMessages", (msgs) => {
       setMessages(msgs);
     });
 
-    // Receive new message
     socket.on("receiveMessage", (msg) => {
       setMessages(prev => [...prev, msg]);
     });

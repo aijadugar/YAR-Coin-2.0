@@ -1,27 +1,24 @@
-.navbar {
+.teacher-navbar {
   height: 70px;
-  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-
-  background: linear-gradient(135deg, #5f6ad4, #7a5fd4);
-  color: white;
-
+  background: #2c3e50;
+  color: #fff;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
-.navbar-brand {
+.teacher-navbar-brand {
   display: flex;
   align-items: center;
-  gap: 1rem;
 }
 
-.navbar-logo {
+.teacher-navbar-logo {
   font-size: 1.6rem;
   font-weight: 700;
   letter-spacing: 1px;
@@ -43,16 +40,18 @@
   background: white;
 }
 
-.navbar-desktop {
+.teacher-navbar-desktop {
   display: flex;
   align-items: center;
+  gap: 1.5rem;
 }
 
 .profile-container {
   position: relative;
+  right:70px;
 }
 
-.profile-btn {
+.teacher-profile-btn {
   display: flex;
   align-items: center;
   gap: 0.6rem;
@@ -62,14 +61,16 @@
   border: 1px solid rgba(255,255,255,0.2);
   color: white;
   cursor: pointer;
-  transition: 0.3s ease;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-left:40px;
 }
 
-.profile-btn:hover {
+.teacher-profile-btn:hover {
   background: rgba(255, 255, 255, 0.25);
 }
 
-.profile-icon {
+.teacher-profile-icon {
   width: 35px;
   height: 35px;
   border-radius: 50%;
@@ -86,7 +87,7 @@
   right: 0;
   top: 65px;
   width: 300px;
-  background: #1f2937; /* Dark slate */
+  background: #1f2937; 
   border-radius: 18px;
   padding: 1.4rem;
   color: #f3f4f6;
@@ -113,7 +114,7 @@
 }
 
 .profile-item span:first-child {
-  color: #9ca3af; /* light gray label */
+  color: #9ca3af; 
   font-weight: 500;
 }
 
@@ -122,21 +123,19 @@
   color: #ffffff;
 }
 
-
-
-.dropdown-logout-btn {
+.dropdown-logout-btn, .grantAchievement-btn {
   width: 100%;
   padding: 0.6rem;
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  margin-top: 0.6rem;
+  margin-top: 0.9rem;
   font-weight: 600;
 }
 
-button.dashboard-btn,
-button.penalty-btn {
-  width: 48%;
+button.dashboard-btn {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  width:100%;
   padding: 0.65rem;
   border-radius: 10px;
   border: none;
@@ -146,20 +145,6 @@ button.penalty-btn {
   transition: all 0.25s ease;
 }
 
-/* Yellow Button */
-button.dashboard-btn {
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  color: #1f2937;
-}
-
-/* Blue Button */
-button.penalty-btn {
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
-  color: white;
-  margin-left:10px;
-}
-
-/* Hover effect */
 button.dashboard-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 15px rgba(251,191,36,0.3);
@@ -170,16 +155,15 @@ button.penalty-btn:hover {
   box-shadow: 0 8px 15px rgba(99,102,241,0.3);
 }
 
-.dashboard-btn a,
-.penalty-btn a {
+button.grantAchievement-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(99, 242, 3, 0.3);
+}
+
+.dashboard-btn a{
   text-decoration: none;
   color: inherit;
   display: block;
-}
-
-.dropdown-logout-btn {
-  background: #f0cd07;
-  color: white;
 }
 
 .dashboard-btn a {

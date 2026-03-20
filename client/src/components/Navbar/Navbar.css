@@ -1,12 +1,9 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: "Helvetica Neue", Arial, sans-serif;
+div.bid-item{
+  color:black;
 }
 
 .navbar {
   height: 70px;
-  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -81,9 +78,11 @@ body {
   right: 0;
   width: 320px;
   padding: 1.5rem;
-  background: #2c3e50;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  background: rgba(23, 10, 45, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-Filter: blur(16px);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
   animation: fadeIn 0.2s ease-in-out;
   z-index: 999;
 }
@@ -132,10 +131,9 @@ body {
   font-weight: 600;
 }
 
-.dropdown-logout-btn {
+.dropdown-logout-btn, .penalty-history-btn, .nft-history-btn {
   width: 100%;
   margin-top: 1.2rem;
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
   border: none;
   padding: 0.75rem;
   border-radius: 10px;
@@ -145,7 +143,39 @@ body {
   transition: all 0.3s ease;
 }
 
-button.dashboard-btn,
+.dropdown-logout-btn{
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.penalty-history-btn{
+  background: #2ecc71;
+}
+
+.nft-history-btn{
+  background: rgb(5, 217, 240);
+}
+
+.penalty-history-btn a{
+  text-decoration: none;
+  color:inherit;
+}
+
+.nft-history-btn a{
+  text-decoration: none;
+  color:inherit;
+}
+
+.penalty-history-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(99, 242, 3, 0.3);
+}
+
+.nft-history-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(67, 189, 208, 0.3);
+}
+
+button.navbar-dashboard-btn,
 button.dex-btn {
   width: 48%;
   padding: 0.65rem;
@@ -157,13 +187,15 @@ button.dex-btn {
   transition: all 0.25s ease;
 }
 
-/* Yellow Button */
-button.dashboard-btn {
+button.navbar-dashboard-btn {
   background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  color: #1f2937;
 }
 
-/* Blue Button */
+button.navbar-dashboard-btn a{
+  text-decoration: none;
+  color:white;
+}
+
 button.dex-btn {
   background: linear-gradient(135deg, #6366f1, #4f46e5);
   color: white;
@@ -182,11 +214,10 @@ button.dex-btn:hover {
 }
 
 .dropdown-logout-btn:hover {
-  background: #c0392b;
   transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(241, 4, 4, 0.3);
 }
 
-/* ===== MOBILE MENU BUTTON ===== */
 .mobile-menu-btn {
   display: none;
   flex-direction: column;
@@ -203,7 +234,6 @@ button.dex-btn:hover {
   border-radius: 2px;
 }
 
-/* ===== MOBILE RESPONSIVE ===== */
 @media (max-width: 768px) {
   .navbar {
     padding: 0 1rem;
@@ -218,7 +248,6 @@ button.dex-btn:hover {
   }
 }
 
-/* ===== ANIMATION ===== */
 @keyframes fadeIn {
   from {
     opacity: 0;

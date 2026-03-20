@@ -1,6 +1,8 @@
 import { io } from "socket.io-client";
 
-const socket = io("https://fictional-journey-9796755g5qgwc7gwg-5000.app.github.dev", {
+const baseUrl = import.meta.env.VITE_BASE_URL;
+
+const socket = io(`${baseUrl}`, {
   transports: ["websocket"],
   withCredentials: true,
   autoConnect: true,
@@ -9,5 +11,4 @@ const socket = io("https://fictional-journey-9796755g5qgwc7gwg-5000.app.github.d
   reconnectionDelay: 1000
 });
 
-// Make sure we're exporting default
 export default socket;

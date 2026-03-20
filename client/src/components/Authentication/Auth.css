@@ -1,5 +1,3 @@
-/* ===================== IMPROVED AUTH CSS (FINAL VERSION) ===================== */
-
 .auth-container {
   display: flex;
   justify-content: center;
@@ -10,7 +8,6 @@
   font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Auth Card Box */
 .auth-box {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px);
@@ -46,7 +43,6 @@
   font-weight: 500;
 }
 
-/* ===================== ROLE TOGGLE ===================== */
 .role-toggle {
   display: flex;
   justify-content: space-between;
@@ -82,7 +78,6 @@
   color: #fff;
 }
 
-/* ===================== FORM STYLING ===================== */
 .auth-form {
   text-align: left;
   margin-top: 10px;
@@ -93,9 +88,6 @@
   gap: 8px;
 }
 
-/* .input-group {
-  width: 100%;
-} */
 
 .auth-form label {
   display: block;
@@ -107,7 +99,7 @@
 
 .auth-form input {
   width: 100%;
-  padding:10px;
+  padding: 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   outline: none;
@@ -129,7 +121,6 @@
   transform: translateY(-1px);
 }
 
-/* ===================== NAME FIELDS FIX ===================== */
 .name-fields {
   display: flex;
   gap: 25px;
@@ -144,15 +135,36 @@
 
 .name-fields .input-group input {
   margin-bottom: 0;
-  border-right: none; /* removes inner border line */
+  border-right: none;
 }
 
 .name-fields .input-group:first-child input {
   border-right: none;
 }
 
-/* ===================== BUTTON ===================== */
-.auth-form button {
+.metamask-btn {
+  background-color: #FF5C16;
+  color: white;
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  box-shadow: 0 5px 20px rgba(118, 75, 162, 0.4);
+}
+
+.metamask-btn:hover {
+  transform: translateY(-3px);
+  background: #e07d52;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+.login-btn,
+.register-btn {
   width: 100%;
   padding: 15px;
   border: none;
@@ -167,7 +179,8 @@
   box-shadow: 0 5px 20px rgba(118, 75, 162, 0.4);
 }
 
-.auth-form button:hover {
+.login-btn:hover,
+.register-btn:hover {
   transform: translateY(-3px);
   background: linear-gradient(135deg, #6a89f7, #8c6bf1);
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
@@ -179,7 +192,6 @@
   box-shadow: none;
 }
 
-/* ===================== LOGIN / SIGNUP LINK ===================== */
 .signup-text {
   margin: 18px 0 12px 0;
   font-size: 0.95rem;
@@ -200,7 +212,6 @@
   background: rgba(167, 139, 250, 0.15);
 }
 
-/* ===================== MESSAGES ===================== */
 .auth-message {
   padding: 12px 15px;
   border-radius: 10px;
@@ -227,39 +238,14 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* ===================== PASSWORD STRENGTH ===================== */
-.password-strength {
-  margin-top: -12px;
-  margin-bottom: 15px;
-  font-size: 0.8rem;
-  padding: 5px;
-  border-radius: 5px;
-  text-align: center;
-  font-weight: 600;
-}
 
-.password-strength.weak {
-  background: rgba(220, 53, 69, 0.2);
-  color: #f8d7da;
-}
-
-.password-strength.medium {
-  background: rgba(255, 193, 7, 0.2);
-  color: #fff3cd;
-}
-
-.password-strength.strong {
-  background: rgba(40, 167, 69, 0.2);
-  color: #c6f6d5;
-}
-
-/* ===================== RESPONSIVENESS ===================== */
 @media (max-width: 768px) {
   .auth-box {
     padding: 40px 25px;
@@ -304,7 +290,7 @@
   }
 }
 
-/* ===================== DARK MODE SUPPORT ===================== */
+
 @media (prefers-color-scheme: dark) {
   .auth-container {
     background: radial-gradient(circle at top left, #1a1a2e, #16213e);
@@ -319,3 +305,4 @@
     background: rgba(255, 255, 255, 0.08);
   }
 }
+

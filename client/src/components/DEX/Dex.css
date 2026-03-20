@@ -11,7 +11,6 @@
     sans-serif;
 }
 
-/* Main Card */
 .dex-card {
   background: white;
   padding: 2.5rem;
@@ -82,7 +81,6 @@
   margin: 0;
 }
 
-/* Display Row for Side by Side Boxes */
 .display-row {
   display: flex;
   justify-content: space-between;
@@ -125,7 +123,6 @@
   background-clip: text;
 }
 
-/* Convert Button */
 .convert-btn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -155,7 +152,6 @@
   cursor: not-allowed;
 }
 
-/* History Button */
 .history-btn {
   background: transparent;
   color: #667eea;
@@ -177,11 +173,10 @@
   transform: translateY(-2px);
 }
 
-/* History Panel */
 .history-panel {
   width: 380px;
   background: white;
-  border-radius: 20px;
+  border-radius: 150px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   padding: 1.5rem;
   max-height: 600px;
@@ -212,7 +207,6 @@
   gap: 1rem;
 }
 
-/* Transaction Card */
 .transaction-card {
   background: #f8f9fa;
   border-radius: 12px;
@@ -256,7 +250,6 @@
   border-radius: 12px;
 }
 
-/* Custom Scrollbar for History Panel */
 .history-panel::-webkit-scrollbar {
   width: 8px;
 }
@@ -269,13 +262,13 @@
 .history-panel::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 10px;
+  width:40px;
 }
 
 .history-panel::-webkit-scrollbar-thumb:hover {
   background: #764ba2;
 }
 
-/* Animations */
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -309,7 +302,6 @@
   }
 }
 
-/* Responsive Design */
 @media (max-width: 968px) {
   .dex-page {
     flex-direction: column;
