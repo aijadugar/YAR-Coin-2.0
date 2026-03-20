@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Auth.css";
 import { approveYAR } from "../../utils/approveYAR";
@@ -13,6 +13,7 @@ export default function Auth() {
   const [message, setMessage] = useState({ text: "", type: "" }); 
   const [walletAddress, setWalletAddress] = useState("");
   const [isWalletConnected, setIsWalletConnected] = useState(false);
+  const [dotCount, setDotCount] = useState(0);
   const navigate = useNavigate();
 
   const [studentFormData, setStudentFormData] = useState({
@@ -141,11 +142,7 @@ export default function Auth() {
       setIsLoading(false);
       return;
     }
-
-
-
-
-    }
+  }
 
     try {
       showMessage("Setting up your wallet...", "success");
@@ -304,6 +301,17 @@ export default function Auth() {
     return role === "student" ? handleStudentChange : handleTeacherChange;
   };
 
+  useEffect(() => {
+      if (isLoading) {
+        const interval = setInterval(() => {
+          setDotCount(prev => (prev + 1) % 4); 
+        }, 500); 
+        return () => clearInterval(interval);
+      } else {
+        setDotCount(0); 
+      }
+    }, [isLoading]);
+
   return (
     <div className="auth-container">
       <div className="auth-box">
@@ -424,7 +432,7 @@ export default function Auth() {
                 <div className="input-group">
                   <label>Base Price (YARCoins)</label>
                   <input
-                    type="number"
+                    type="text"
                     name="basePrice"
                     placeholder="Enter your base price"
                     value={studentFormData.basePrice}
@@ -460,7 +468,7 @@ export default function Auth() {
             </button>
 
             <button type="submit" disabled={isLoading || !walletAddress} className="register-btn">
-              {isLoading ? "Setting up wallet..." : "Register"}
+              {isLoading ? `Setting up wallet${".".repeat(dotCount)}` : "Register"}
             </button>
 
           </form>

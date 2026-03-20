@@ -918,19 +918,24 @@
 }
 
 .copy-btn-homepage{
-  background: linear-gradient(135deg, #6a7cff, #9a6bff);
-  border: none;
-  padding: 6px 14px;
-  color: white;
-  font-size: 13px;
-  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #667eea;
+  border-radius: 5px;
+  width: 26px; height: 26px;
   cursor: pointer;
-  transition: 0.2s;
+  color: #667eea;
+  transition: all 0.2s;
+  flex-shrink: 0;
 }
 
-.copy-btn-homepage:hover {
-  transform: scale(1.05);
-}
+.copy-btn-homepage svg { width: 13px; height: 13px; }
+.copy-btn-homePage:hover { background: white; border-color: #667eea; color: white; }
+.copy-btn-homepage.copied { background: white; border-color: #667eea; color: #667eea; }
+
+
 
 .home-footer {
   background: rgba(0, 0, 0, 0.3);

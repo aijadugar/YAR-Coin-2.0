@@ -406,7 +406,6 @@
 }
 .copy-btn svg { width: 13px; height: 13px; }
 .copy-btn:hover { background: #667eea; border-color: #667eea; color: white; }
-.copy-btn.copied { background: #28a745; border-color: #28a745; color: white; }
 
 .skills-cell { display: flex; flex-wrap: wrap; gap: 4px; }
 .skill-tag { background: #ede9ff; color: #5b4fcf; padding: 3px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 500; white-space: nowrap; }
