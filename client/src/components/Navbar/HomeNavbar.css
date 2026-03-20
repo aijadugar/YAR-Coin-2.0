@@ -370,8 +370,8 @@
 /* Add this new style for the combined auth button */
 .auth-btn {
   padding: 0.7rem 1.8rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #00F5D4;
+  color: #251E3E;
   border: none;
   border-radius: 30px;
   font-weight: 600;
