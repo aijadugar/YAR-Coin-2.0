@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./NFTHistory.css";
+import NoNFT from '../../assets/No_NFTS.png';
 
 const NFTHistory = () => {
   const [history, setHistory] = useState([]);
@@ -91,7 +92,13 @@ const NFTHistory = () => {
         </div>
 
         {history.length === 0 ? (
-          <div className="no-history">No NFTs Found</div>
+          <>
+          <div className="no-nft-content">
+              <img src={NoNFT} alt="no-nft-yet" className="no-nft-image" />
+              <div className="no-history">No Penalties yet. Lucky you!</div>
+          </div>
+           <div className="no-history">No NFTs Yet</div>
+          </>
         ) : (
           <div className="history-list">
             {history.map((item) => (
