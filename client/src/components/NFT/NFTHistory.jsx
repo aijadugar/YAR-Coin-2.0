@@ -95,9 +95,8 @@ const NFTHistory = () => {
           <>
           <div className="no-nft-content">
               <img src={NoNFT} alt="no-nft-yet" className="no-nft-image" />
-              <div className="no-history">No Penalties yet. Lucky you!</div>
+              <div className="no-history">No NFTs yet!</div>
           </div>
-           <div className="no-history">No NFTs Yet</div>
           </>
         ) : (
           <div className="history-list">
