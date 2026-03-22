@@ -37,7 +37,7 @@ const NFT = () => {
 
     if (!prefillWallet) {
       setMessage({
-        text: "Student wallet is required",
+        text: "Candidate wallet is required",
         type: "error",
       });
       return;
@@ -103,7 +103,7 @@ const NFT = () => {
           )}
 
           <form onSubmit={handleSubmit}>
-            <label>Student Wallet Address</label>
+            <label>Candidate Wallet Address</label>
             <input
               type="text"
               value={prefillWallet}

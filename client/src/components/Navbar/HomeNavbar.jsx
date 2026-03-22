@@ -144,11 +144,6 @@ export default function HomeHeader() {
                       Dashboard
                     </button>
                     
-                    <button className="dropdown-item">
-                      <FaCoins className="dropdown-icon" />
-                      YARC Wallet
-                    </button>
-                    
                     <div className="dropdown-divider"></div>
                     
                     <button 

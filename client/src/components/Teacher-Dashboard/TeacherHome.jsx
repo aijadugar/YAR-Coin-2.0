@@ -22,13 +22,79 @@ const TeacherHome = () => {
   const [teacherPage, setTeacherPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('myteam');
+  const [dotCount, setDotCount] = useState(0);
+  const [bids, setBids] = useState({});
 
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchInitialData();
-    }, 3000);
+    }, 2000);
     return () => clearTimeout(timer);
-  });
+  },[]);
+
+  useEffect(() => {
+  let interval;
+  if (loading) {
+    interval = setInterval(() => {
+      setDotCount(prev => (prev + 1) % 4);
+    }, 500);
+  } else {
+    setDotCount(0);
+  }
+  return () => {
+    if (interval) clearInterval(interval);
+  };
+}, [loading]);
+
+useEffect(() => {
+  const fetchBids = async () => {
+    try {
+      const allStudents = students; // or acquired if you want only those
+
+      const results = await Promise.all(
+        allStudents.map(async (s) => {
+          if (!s.walletAddress) return null;
+
+          const response = await fetch(
+            "https://automatic-space-spoon-7vqpjr79p4qqcp4vx-5000.app.github.dev/api/biddings/bids",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                walletAddress: s.walletAddress,
+              }),
+            }
+          );
+
+          const data = await response.json();
+
+          return {
+            walletAddress: s.walletAddress,
+            ...data,
+          };
+        })
+      );
+
+      // Convert array → object for easy access
+      const bidsMap = {};
+      results.forEach((item) => {
+        if (item) {
+          bidsMap[item.walletAddress] = item;
+        }
+      });
+
+      setBids(bidsMap);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (students.length > 0) {
+    fetchBids();
+  }
+}, [students]);
 
   const fetchInitialData = async () => {
     try {
@@ -241,20 +307,20 @@ const TeacherHome = () => {
   );
 
   const filterOptions = [
-    { value: 'all', label: 'All Students' },
+    { value: 'all', label: 'All Candidates' },
     { value: 'myteam', label: 'My Team' },
-    { value: 'admins', label: 'Admins' },
+    { value: 'admins', label: 'Mentors' },
   ];
 
   const getSectionTitle = () => {
-    if (activeFilter === 'all') return 'Available Members for Bidding';
+    if (activeFilter === 'all') return 'Available Candidates for Bidding';
     if (activeFilter === 'myteam') return 'My Team';
-    return 'Admins & Current Holdings';
+    return 'Mentors & Current Holdings';
   };
 
   const getSectionBadge = () => {
-    if (activeFilter === 'admins') return `${filteredTeachers.length} admins`;
-    return `${filteredStudents.length} members`;
+    if (activeFilter === 'admins') return `${filteredTeachers.length} mentors`;
+    return `${filteredStudents.length} candidates`;
   };
 
   if (loading) {
@@ -280,7 +346,7 @@ const TeacherHome = () => {
             </div>
           </div>
           <div className="pl__shadow"></div>
-          
+          <div className="loading-text">Loading{'.'.repeat(dotCount)}</div>
         </div>
       </>
     );
@@ -355,7 +421,7 @@ const TeacherHome = () => {
                       {paginatedStudents.length === 0 ? (
                         <tr>
                           <td colSpan={activeFilter === 'all' ? 9 : 10} className="no-results">
-                            {searchQuery ? 'No members match your search.' : activeFilter === 'myteam' ? 'You have not acquired any members yet.' : 'No available members.'}
+                            {searchQuery ? 'No candidates match your search.' : activeFilter === 'myteam' ? 'You have not acquired any candidate yet.' : 'No available candidates.'}
                           </td>
                         </tr>
                       ) : (
@@ -519,7 +585,7 @@ const TeacherHome = () => {
               <>
                 <div className="teachers-list-table">
                   {paginatedTeachers.length === 0 ? (
-                    <div className="no-results-admin">No admins match your search.</div>
+                    <div className="no-results-admin">No mentors match your search.</div>
                   ) : (
                     paginatedTeachers.map((teacher) => {
                       const dt = processTeacherForDisplay(teacher);
@@ -549,24 +615,43 @@ const TeacherHome = () => {
                                 className="toggle-btn"
                                 onClick={() => toggleTeacherDropdown(teacher._id)}
                               >
-                                Acquired Members ({acquired.length})
+                                Acquired Candidates ({acquired.length})
                                 <span className={`arrow ${isExpanded ? 'up' : 'down'}`}>&#9660;</span>
                               </button>
                             </div>
                           </div>
 
+                          
                           {isExpanded && (
                             <div className="teacher-acquired-list">
                               {acquired.length > 0 ? (
-                                acquired.map((s) => (
-                                  <div key={s._id} className="acquired-row">
-                                    <span className="acquired-name">{s.name}</span>
-                                    <span className="acquired-email">{s.email}</span>
-                                    <span className="acquired-balance">{s.yarBalance} YARC</span>
-                                  </div>
-                                ))
+                                acquired.map((s) => {
+                                  const bidData = bids[s.walletAddress];
+
+                                  return (
+                                    <div key={s._id} className="acquired-row">
+
+                                      <span className="acquired-name">
+                                        {bidData?.studentName || "Loading..."}
+                                      </span>
+
+                                      <span className="acquired-email">
+                                        {bidData?.studentEmail || "Loading..."}
+                                      </span>
+
+                                      <span className="acquired-balance">
+                                        {bidData
+                                          ? `${bidData.highestBid} YARC`
+                                          : "Loading..."}
+                                      </span>
+
+                                    </div>
+                                  );
+                                })
                               ) : (
-                                <div className="no-acquisitions">No members acquired yet</div>
+                                <div className="no-acquisitions">
+                                  No candidates acquired yet
+                                </div>
                               )}
                             </div>
                           )}

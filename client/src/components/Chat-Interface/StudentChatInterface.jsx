@@ -164,7 +164,7 @@ function StudentChatInterface() {
               ☰
             </button>
           )}
-          <h2>Team Workspace - Student View</h2>
+          <h2>Team Workspace - Candidate View</h2>
           {!socket.connected && (
             <span style={{ color: "red", marginLeft: "10px" }}>(Disconnected)</span>
           )}

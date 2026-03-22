@@ -119,7 +119,7 @@ export default function HomePage() {
               </h1>
 
               <p className="hero-description">
-                Step into an interactive space where teachers recognize and bid on student talents.
+                Step into an interactive space where mentors recognize and bid on candidate talents.
                 Showcase your achievements, earn YARC coins, and get noticed by top educators in real-time.
               </p>
 

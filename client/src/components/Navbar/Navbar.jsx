@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
+import {
+  FaUser,
+} from "react-icons/fa";
 
 export default function Navbar({ 
   onLogout, 
@@ -21,7 +24,7 @@ export default function Navbar({
     window.location.href = "/"; 
   };
 
-  const toggleMobileMenu = () => {
+  const navbartoggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
@@ -45,7 +48,10 @@ export default function Navbar({
     return (
       <nav className="navbar">
         <div className="navbar-brand">
-          <div className="navbar-logo">YARCoin</div>
+          <div className="navbar-logo-container">
+          <span className="navbar-logo-text">YARCoin</span>
+          <span className="navbar-logo-badge">Learn & Earn</span>
+        </div>
         </div>
       </nav>
     );
@@ -54,10 +60,13 @@ export default function Navbar({
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <div className="navbar-logo">YARCoin</div>
+        <div className="navbar-logo-container">
+          <span className="navbar-logo-text">YARCoin</span>
+          <span className="navbar-logo-badge">Learn & Earn</span>
+        </div>
         <button 
           className="mobile-menu-btn"
-          onClick={toggleMobileMenu}
+          onClick={navbartoggleMobileMenu}
         >
           <span></span>
           <span></span>
@@ -68,7 +77,9 @@ export default function Navbar({
       <div className="navbar-desktop">
         <div className="profile-container" ref={profileRef}>
           <button className="profile-btn" onClick={toggleProfile}>
-            <div className="profile-icon">👤</div>
+            <div className="profile-avatar">
+            <FaUser />
+            </div>
             <span>{storedUser.name}</span>
           </button>
 

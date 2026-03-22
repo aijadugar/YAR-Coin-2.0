@@ -42,7 +42,8 @@ export default function TeacherNavbar({
     return (
       <nav className="teacher-navbar">
         <div className="teacher-navbar-brand">
-          <div className="teacher-navbar-logo">YARCoin</div>
+          <span className="teacher-logo-text">YARCoin</span>
+          <span className="teacher-logo-badge">Learn & Earn</span>
         </div>
       </nav>
     );
@@ -51,7 +52,8 @@ export default function TeacherNavbar({
   return (
     <nav className="teacher-navbar">
       <div className="teacher-navbar-brand">
-        <div className="teacher-navbar-logo">YARCoin</div>
+        <span className="teacher-logo-text">YARCoin</span>
+          <span className="teacher-logo-badge">Learn & Earn</span>
         <button 
           className="mobile-menu-btn"
           onClick={toggleMobileMenu}
@@ -70,25 +72,25 @@ export default function TeacherNavbar({
           </button>
 
           {profileOpen && (
-            <div className="profile-dropdown">
+            <div className="teacher-profile-dropdown">
               <h3>Teacher Profile</h3>
 
-              <div className="profile-item">
+              <div className="teacher-profile-item">
                 <span>Name:</span>
                 <span>{storedTeacher.name}</span>
               </div>
 
-              <div className="profile-item">
+              <div className="teacher-profile-item">
                 <span>Email:</span>
                 <span>{storedTeacher.email}</span>
               </div>
 
-              <div className="profile-item">
+              <div className="teacher-profile-item">
                 <span>Specialization:</span>
                 <span>{storedTeacher.specialization || "Not specified"}</span>
               </div>
 
-              <div className="profile-item">
+              <div className="teacher-profile-item">
                 <span>Yarc Balance:</span>
                 <span>{storedTeacher.yarBalance ?? storedTeacher.purse ?? 0}</span>
               </div>

@@ -17,7 +17,7 @@ const Penalty = () => {
   useEffect(() => {
     const role = localStorage.getItem("userRole");
     if (role !== "teacher") {
-      alert("Access denied. Teachers only.");
+      alert("Access denied. Mentors only.");
       navigate("/");
     }
   }, [navigate]);
@@ -40,7 +40,7 @@ const Penalty = () => {
 
     if (!teacherWallet) {
       setMessage({
-        text: "Teacher wallet not found. Please login again.",
+        text: "Mentor wallet not found. Please login again.",
         type: "error",
       });
       return;
@@ -48,7 +48,7 @@ const Penalty = () => {
 
     if (!prefillWallet) {
       setMessage({
-        text: "Student wallet is required",
+        text: "Candidate wallet is required",
         type: "error",
       });
       return;
@@ -115,10 +115,9 @@ const Penalty = () => {
           )}
 
           <form onSubmit={handleSubmit}>
-            <label>Student Wallet Address</label>
+            <label>Candidate Wallet Address</label>
             <input
               type="text"
-              placeholder="Enter student wallet address"
               value={prefillWallet}
               readOnly
               style={{ cursor: "not-allowed", opacity: 0.7 }}

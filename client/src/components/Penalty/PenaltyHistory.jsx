@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./PenaltyHistory.css";
+import NoPenalty from '../../assets/No_Penalties_Image.png';
 
 const PenaltyHistory = () => {
   const [history, setHistory] = useState([]);
@@ -67,7 +68,12 @@ const PenaltyHistory = () => {
         </div>
 
         {history.length === 0 ? (
-          <div className="no-history">No penalties found 🎉</div>
+          <>
+          <div className="no-penalty-content">
+              <img src={NoPenalty} alt="no-penalty-yet" className="no-penalty-image" />
+              <div className="no-history">No Penalties yet. Lucky you!</div>
+          </div>
+          </>
         ) : (
           <div className="history-list">
             {history.map((item) => (

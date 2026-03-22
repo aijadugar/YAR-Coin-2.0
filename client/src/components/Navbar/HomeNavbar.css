@@ -134,7 +134,6 @@
 }
 
 .profile-btn:hover {
-  border-color: #667eea;
   box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
 }
 
@@ -142,11 +141,11 @@
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  background: #4C1D95;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  color:#DDD6FE;
+  color:rgb(46, 46, 46);
 }
 
 .profile-name {
@@ -232,7 +231,7 @@
 }
 
 .dropdown-item:hover {
-  color: #667eea;
+  color: #dc2626;
 }
 
 .dropdown-item.logout:hover {
@@ -249,7 +248,7 @@
   background: transparent;
   border: none;
   font-size: 1.5rem;
-  color: #667eea;
+  color: #00F5D4;
   cursor: pointer;
   padding: 0.5rem;
 }
@@ -370,8 +369,8 @@
 /* Add this new style for the combined auth button */
 .auth-btn {
   padding: 0.7rem 1.8rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #00F5D4;
+  color: #251E3E;
   border: none;
   border-radius: 30px;
   font-weight: 600;
@@ -387,7 +386,7 @@
 .auth-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  background: #68efdd;
 }
 
 .auth-btn .btn-icon {
@@ -397,8 +396,8 @@
 .mobile-auth-btn {
   width: 100%;
   padding: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #68efdd;
+  color: black;
   border: none;
   border-radius: 12px;
   font-weight: 600;
@@ -470,10 +469,6 @@
 
   .dropdown-item {
     color: #e2e8f0;
-  }
-
-  .dropdown-item:hover {
-    background: #334155;
   }
 
   .mobile-menu {

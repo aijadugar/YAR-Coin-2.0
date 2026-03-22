@@ -253,7 +253,7 @@ export default function Auth() {
     const data = await res.json();
 
     if (!res.ok) {
-      showMessage("Error: " + (data.error || "Login failed"), "error");
+      showMessage("Error on login: " + (data.error || "Login failed"), "error");
       return;
     }
 
@@ -319,7 +319,7 @@ export default function Auth() {
         <p>
           {tab === "login"
             ? "Sign in to your YARCoin account"
-            : `Register as a ${role}`}
+            : `Register to your YARCoin account`}
         </p>
 
         {message.text && (

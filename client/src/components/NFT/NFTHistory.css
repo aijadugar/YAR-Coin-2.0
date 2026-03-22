@@ -1,6 +1,6 @@
 .nft-history-wrapper {
   min-height: 100vh;
-  background: radial-gradient(circle at top left, #667eea 0%, #764ba2 40%, #44337a 100%);
+  background: #3d0f5c;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -123,6 +123,21 @@
   font-size: 13px;
   color: #888;
   margin-top: 10px;
+}
+
+.no-nft-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  text-align: center;
+}
+
+.no-nft-image {
+  width: 300px;
+  height: auto;
+  margin-bottom: 20px;
 }
 
 .no-history {

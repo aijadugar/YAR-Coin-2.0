@@ -134,6 +134,44 @@
 @keyframes shadow {
   0%, 50%, 100% { opacity: 0.3; transform: translateX(-50%) scale(0.6); background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 70%, transparent 100%); }
   25%, 75% { opacity: 0.7; transform: translateX(-50%) scale(1.2); background: radial-gradient(ellipse at center, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 60%, transparent 90%); }
+
+}
+
+.loading-text {
+  position: absolute;
+  bottom: -45px;
+  left: 34%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-align: center;
+  white-space: nowrap;
+  animation: pulse 1.5s ease-in-out infinite;
+  font-family: JetBrains Mono;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  animation: pulse 1.5s ease-in-out infinite, glow 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+  }
 }
 
 .col-penalty,
@@ -189,7 +227,7 @@
 }
 
 .bidding-system {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background:#3D0F5C;
   min-height: 100vh;
   padding: 24px 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -226,8 +264,8 @@
 }
 
 .section-badge {
-  background: #667eea;
-  color: white;
+  background: #ffd54f;
+  color: black;
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.8rem;

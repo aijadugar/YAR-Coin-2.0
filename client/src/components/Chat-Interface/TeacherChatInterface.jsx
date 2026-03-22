@@ -180,7 +180,7 @@ function TeacherChatInterface() {
               ☰
             </button>
           )}
-          <h2>Team Workspace - Teacher View</h2>
+          <h2>Team Workspace - Mentor View</h2>
           {!socket.connected && (
             <span className="connection-status disconnected">(Disconnected)</span>
           )}
