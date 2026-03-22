@@ -4,6 +4,26 @@ const Student = require('../models/Student');
 const Teacher = require('../models/Teacher');
 const Bidding = require('../models/Bidding');
 
+Router.post('/bids', async (req, res) => {
+    try {
+        const { walletAddress } = req.body;
+        if (!walletAddress) {
+            return res.status(400).json({ message: "Wallet address is required" });
+        }
+        const student = await Student.findOne({ walletAddress });
+        if (!student) {
+            return res.status(404).json({ message: "Member not found" });
+        }
+        const highestBid = await Bidding.findOne({ studentId: student._id }).sort({ bidAmount: -1 });
+        if (!highestBid) {
+            return res.status(404).json({ message: "No bids found for this member" });
+        }
+        return res.status(200).json({ studentName: student.name, studentEmail: student.email, highestBid: highestBid.bidAmount });
+    } catch (error) {
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 Router.get('/student/:studentId', async (req, res) => {
     try {
         const bids = await Bidding.find({ studentId: req.params.studentId }).sort({ bidAmount: -1 });
