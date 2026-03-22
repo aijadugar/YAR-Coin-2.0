@@ -69,6 +69,11 @@ export default function HomePage() {
     }, 2000);
   };
 
+  const getRoleDisplayName = (role) => {
+    if (role === "student") return "candidate";
+    if (role === "teacher") return "mentor";
+  }
+
   return (
     <div className="home-page">
       <HomeNavbar /> 
@@ -80,7 +85,7 @@ export default function HomePage() {
               <div className="welcome-badge">
                 <FaRocketIcon className="badge-icon" />
                 <span>Welcome{loggedInUser ? `, ${loggedInUser}` : " to YARCoin"}!</span>
-                {userRole && <span className="role-badge"> ({userRole})</span>}
+                {userRole && <span className="role-badge"> ({getRoleDisplayName(userRole)})</span>}
               </div>
 
               <div className="contract-box">
@@ -146,12 +151,12 @@ export default function HomePage() {
               <div className="hero-stats">
                 <div className="stat-item">
                   <span className="stat-number">500+</span>
-                  <span className="stat-label">Active Students</span>
+                  <span className="stat-label">Active Candidates</span>
                 </div>
                 <div className="stat-divider"></div>
                 <div className="stat-item">
                   <span className="stat-number">50+</span>
-                  <span className="stat-label">Expert Teachers</span>
+                  <span className="stat-label">Expert Mentors</span>
                 </div>
                 <div className="stat-divider"></div>
                 <div className="stat-item">
@@ -374,7 +379,7 @@ export default function HomePage() {
                   <FaBullseye className="feature-icon" />
                 </div>
                 <h3>Real-time Bidding</h3>
-                <p>Experience live bidding sessions where teachers compete to mentor talented students. Watch bids update in real-time.</p>
+                <p>Experience live bidding sessions where mentors compete to mentor talented candidates. Watch bids update in real-time.</p>
                 <div className="feature-stats">
                   <span className="stat">
                     <FaClock className="stat-icon" />
@@ -382,7 +387,7 @@ export default function HomePage() {
                   </span>
                   <span className="stat">
                     <FaUsers className="stat-icon" />
-                    50+ Teachers
+                    50+ Mentors
                   </span>
                 </div>
               </div>
@@ -392,7 +397,7 @@ export default function HomePage() {
                   <FaChartLine className="feature-icon" />
                 </div>
                 <h3>Live Analytics</h3>
-                <p>Track bidding patterns, teacher preferences, and market trends with our comprehensive analytics dashboard.</p>
+                <p>Track bidding patterns, mentor preferences, and market trends with our comprehensive analytics dashboard.</p>
                 <div className="feature-stats">
                   <span className="stat">
                     <FaChartLine className="stat-icon" />
@@ -436,7 +441,7 @@ export default function HomePage() {
                 <div className="step-number">1</div>
                 <div className="step-content">
                   <h3>Create Your Profile</h3>
-                  <p>Sign up as a student or teacher and showcase your skills, achievements, and expertise.</p>
+                  <p>Sign up as a candidate or mentor and showcase your skills, achievements, and expertise.</p>
                 </div>
               </div>
               
@@ -444,7 +449,7 @@ export default function HomePage() {
                 <div className="step-number">2</div>
                 <div className="step-content">
                   <h3>Enter the Playground</h3>
-                  <p>Browse student profiles, place bids, or receive bids from interested teachers.</p>
+                  <p>Browse candidate profiles, place bids, or receive bids from interested mentors.</p>
                 </div>
               </div>
               
@@ -452,7 +457,7 @@ export default function HomePage() {
                 <div className="step-number">3</div>
                 <div className="step-content">
                   <h3>Get Acquired & Earn</h3>
-                  <p>Successfully bid students get mentored and earn YARC coins for their achievements.</p>
+                  <p>Successfully bid candidates get mentored and earn YARC coins for their achievements.</p>
                 </div>
               </div>
             </div>
@@ -462,7 +467,7 @@ export default function HomePage() {
         <section className="cta-section">
           <div className="cta-container">
             <h2>Ready to Start Your Journey?</h2>
-            <p>Join thousands of students and teachers already using YARCoin</p>
+            <p>Join thousands of candidates and mentors already using YARCoin</p>
             <button className="cta-button" onClick={() => navigate("/auth")}>
               Get Started Now
               <FaArrowRight className="btn-arrow" />
