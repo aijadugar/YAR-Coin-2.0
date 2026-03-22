@@ -1,3 +1,4 @@
+const { SEPOLIA_RPC_URL, ADMIN_PRIVATE_KEY, NFT_CONTRACT_ADDRESS } = require('../utils/env');
 const express = require('express');
 const Router = express.Router();
 const { ethers } = require('ethers');
@@ -34,11 +35,11 @@ Router.post('/nft', async (req, res) => {
         if (!student || !teacher) {
             return res.status(400).json({ message: "Admin or Member wallet not found!" });
         }
-        const provider = new ethers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
-        const wallet = new ethers.Wallet(process.env.ADMIN_PRIVATE_KEY, provider);
+        const provider = new ethers.JsonRpcProvider(SEPOLIA_RPC_URL);
+        const wallet = new ethers.Wallet(ADMIN_PRIVATE_KEY, provider);
         const abi = ["function mint(address student) public",
-                     "function nextTokenId() view returns (uint256)"];
-        const contract = new ethers.Contract(process.env.NFT_CONTRACT_ADDRESS, abi, wallet);
+            "function nextTokenId() view returns (uint256)"];
+        const contract = new ethers.Contract(NFT_CONTRACT_ADDRESS, abi, wallet);
         const tokenId = (await contract.nextTokenId()).toString();
         let tx;
         try {

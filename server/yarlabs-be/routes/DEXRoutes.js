@@ -1,3 +1,4 @@
+const { SEPOLIA_RPC_URL, DEX_CONTRACT_ADDRESS, YAR_RATE } = require('../utils/env');
 const express = require('express');
 const Router = express.Router();
 const { ethers } = require('ethers');
@@ -31,12 +32,12 @@ Router.post('/convert', async (req, res) => {
         if (!student) {
             return res.status(400).json({ message: "Member not found!" });
         }
-        const provider = new ethers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
+        const provider = new ethers.JsonRpcProvider(SEPOLIA_RPC_URL);
         const receipt = await provider.getTransactionReceipt(txHash);
         if (!receipt || receipt.status !== 1) {
             return res.status(400).json({ message: "Blockchain transaction failed!" });
         }
-        if (receipt.to.toLowerCase() !== process.env.DEX_CONTRACT_ADDRESS.toLowerCase()) {
+        if (receipt.to.toLowerCase() !== DEX_CONTRACT_ADDRESS.toLowerCase()) {
             return res.status(400).json({ message: "Invalid transaction intersection!" });
         }
         const iface = new ethers.Interface([
@@ -62,7 +63,8 @@ Router.post('/convert', async (req, res) => {
         if (student.yarBalance < amount) {
             return res.status(400).json({ message: "Insuffucient YAR balance!" });
         }
-        const usdValue = amount * 0.5;
+        const yarRate = Number(YAR_RATE);
+        const usdValue = amount * yarRate;
         student.yarBalance -= amount;
         await student.save();
         const total = await DEX.aggregate([

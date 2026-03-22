@@ -1,11 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const cron = require('node-cron');
+// const cron = require('node-cron');
 const http = require('http');
+const helmet = require('helmet');
 const { Server } = require('socket.io');
-const dotenv = require('dotenv');
-dotenv.config();
+// const dotenv = require('dotenv');
+// dotenv.config();
+const { PORT, SEPOLIA_RPC_URL, ADMIN_PRIVATE_KEY, YAR_CONTRACT_ADDRESS, MONGO_URI } = require('./utils/env');
 const studentRoutes = require('./routes/studentRoutes');
 const Student = require('./models/Student');
 const teacherRoutes = require('./routes/teacherRoutes');
@@ -22,12 +24,13 @@ const { ethers } = require('ethers');
 const app = express();
 const server = http.createServer(app);
 
-app.use(cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
-}));
+app.use(helmet());
+app.use(cors({ origin: "*", methods: ["GET", "POST", "PUT", "DELETE"], credentials: true }));
 app.use(express.json());
+
+app.get('/', (req, res) => {
+    res.json({ success: true, message: "Welcome to YAR Labs...!" })
+});
 
 app.use('/api/students', studentRoutes);
 app.use('/api/teachers', teacherRoutes);
@@ -37,7 +40,11 @@ app.use('/apply', paneltyRoutes);
 app.use('/mint', nftRoutes);
 app.use('/dex', DEXRoutes);
 
-mongoose.connect(process.env.MONGO_URI)
+app.use((req, res) => {
+    res.status(404).json({ success: false, message: "Route invalid...!", error: "INVALID_ROUTE" });
+});
+
+mongoose.connect(MONGO_URI)
     .then(() => console.log('MongoDB connected...!'))
     .catch((err) => console.log(err));
 
@@ -134,62 +141,70 @@ io.on("connection", (socket) => {
 
 });
 
-// cron.schedule('* * * * *', async () => {
-//     console.log("Running auction settlements...");
-//     const provider = new ethers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
-//     const wallet = new ethers.Wallet(process.env.ADMIN_PRIVATE_KEY, provider);
-//     const contractAddress = process.env.YAR_CONTRACT_ADDRESS;
-//     const abi = ["function transferFrom(address from, address to, uint256 value) public returns (bool)",
-//                  "function allowance(address owner, address spender) view returns (uint256)",
-//                  "function balanceOf(address owner) view returns (uint256)"];
-//     const contract = new ethers.Contract(contractAddress, abi, wallet);
-//     const students = await Student.find({ ownedBy: null });
-//     for (let student of students) {
-//         const lastBid = await Bidding.find({ studentId: student._id }).sort({ createdAt: -1 }).limit(1);
-//         if (!lastBid.length) continue;
-//         const auctionEnd = 1 * 60 * 1000; // 3 * 24 * 60 * 60 * 1000
-//         if (new Date() - lastBid[0].createdAt >= auctionEnd) {
-//             const highestBid = await Bidding.find({ studentId: student._id }).sort({ bidAmount: -1 }).limit(1);
-//             if (!highestBid.length) continue;
-//             const bidAmount=highestBid[0].bidAmount;
-//             const teacher = await Teacher.findById(highestBid[0].teacherId);
-//             if (!teacher) continue;
-//             if (!student.walletAddress || !teacher.walletAddress) {
-//             console.log("Wallet missing!");
-//             continue;
-//         }
-//         if (teacher.purse < bidAmount) {
-//             console.log("Admin has insufficient purse!");
-//             continue;
-//         }
-//         try{
-//             const amount = ethers.parseUnits(bidAmount.toString(), 18);
-//             const allowance = await contract.allowance(teacher.walletAddress, wallet.address);
-//             if (allowance<amount){
-//                 console.log("Admin has not enough approved YARs!");
-//                 continue;
-//             }
-//             const balance= await contract.balanceOf(teacher.walletAddress);
-//             if (balance<amount){
-//                 console.log("Admin has insufficient YAR balance!");
-//                 continue;
-//             }
-//             const tx = await contract.transferFrom(teacher.walletAddress, student.walletAddress, amount);
-//             await tx.wait();
-//             student.ownedBy = teacher._id;
-//             student.yarBalance += bidAmount;
-//             teacher.purse -= bidAmount;
-//             await teacher.save();
-//             await student.save();
-//             console.log("Auction settled successfully!");
-//         }catch(err){
-//             console.log(`Blockchain transfer failed and ${err.message}`);
-//         }
-//     }
-// }
-//     console.log("Finished auction settlements...");
-// });
+app.post('/auction', async (req, res) => {
+    // cron.schedule('* * * * *', async () => {
+    console.log("Running auction settlements...");
+    try {
+        const provider = new ethers.JsonRpcProvider(SEPOLIA_RPC_URL);
+        const wallet = new ethers.Wallet(ADMIN_PRIVATE_KEY, provider);
+        const contractAddress = YAR_CONTRACT_ADDRESS;
+        const abi = ["function transferFrom(address from, address to, uint256 value) public returns (bool)",
+            "function allowance(address owner, address spender) view returns (uint256)",
+            "function balanceOf(address owner) view returns (uint256)"];
+        const contract = new ethers.Contract(contractAddress, abi, wallet);
+        const students = await Student.find({ ownedBy: null });
+        for (let student of students) {
+            const lastBid = await Bidding.find({ studentId: student._id }).sort({ createdAt: -1 }).limit(1);
+            if (!lastBid.length) continue;
+            const auctionEnd = 1 * 60 * 1000; // 3 * 24 * 60 * 60 * 1000
+            if (new Date() - lastBid[0].createdAt >= auctionEnd) {
+                const highestBid = await Bidding.find({ studentId: student._id }).sort({ bidAmount: -1 }).limit(1);
+                if (!highestBid.length) continue;
+                const bidAmount = highestBid[0].bidAmount;
+                const teacher = await Teacher.findById(highestBid[0].teacherId);
+                if (!teacher) continue;
+                if (!student.walletAddress || !teacher.walletAddress) {
+                    console.log("Wallet missing!");
+                    continue;
+                }
+                if (teacher.purse < bidAmount) {
+                    console.log("Admin has insufficient purse!");
+                    continue;
+                }
+                try {
+                    const amount = ethers.parseUnits(bidAmount.toString(), 18);
+                    const allowance = await contract.allowance(teacher.walletAddress, wallet.address);
+                    if (allowance < amount) {
+                        console.log("Admin has not enough approved YARs!");
+                        continue;
+                    }
+                    const balance = await contract.balanceOf(teacher.walletAddress);
+                    if (balance < amount) {
+                        console.log("Admin has insufficient YAR balance!");
+                        continue;
+                    }
+                    const tx = await contract.transferFrom(teacher.walletAddress, student.walletAddress, amount);
+                    await tx.wait();
+                    student.ownedBy = teacher._id;
+                    student.yarBalance += bidAmount;
+                    teacher.purse -= bidAmount;
+                    await teacher.save();
+                    await student.save();
+                    console.log("Auction settled successfully!");
+                } catch (err) {
+                    console.log(`Blockchain transfer failed and ${err.message}`);
+                }
+            }
+        }
+        console.log("Finished auction settlements...");
+        res.status(200).json({ message: "Auction settlements completed!" });
+    } catch (err) {
+        console.log(`Auction settlement error: ${err.message}`);
+        res.status(500).json({ message: "Auction settlement failed!", error: err.message });
+    }
+    // });
+});
 
-server.listen(process.env.PORT, () => {
-    console.log(`Server port : ${process.env.PORT}`)
+server.listen(PORT, () => {
+    console.log(`Server port : ${PORT}`)
 });
