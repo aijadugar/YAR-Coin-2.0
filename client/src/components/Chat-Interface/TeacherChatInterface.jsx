@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./TeacherChatInterface.css";
 import socket from "./socket";
 import { useNavigate } from "react-router-dom";
+import ContributionStats from "../Graph/ContributionStats";
 
 function TeacherChatInterface() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -25,7 +26,7 @@ function TeacherChatInterface() {
       navigate("/auth");
       return;
     }
-    
+
     setUser({
       _id: userId,
       role: userRole,
@@ -159,13 +160,10 @@ function TeacherChatInterface() {
 
               {expandedStudents[index] && (
                 <div className="github-graph-container">
-                  <div className="github-graph-placeholder">
-                    <div className="graph-content">
-                      <p className="graph-placeholder-text">
-                        GitHub Contribution Graph for {student.githubUsername || "N/A"}
-                      </p>
-                    </div>
-                  </div>
+                  <ContributionStats
+                    repoOwner="aijadugar"
+                    repoName="YAR-Coin-2.0"
+                  />
                 </div>
               )}
             </div>
