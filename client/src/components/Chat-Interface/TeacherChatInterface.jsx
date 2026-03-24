@@ -11,9 +11,24 @@ function TeacherChatInterface() {
   const [expandedStudents, setExpandedStudents] = useState({});
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [dotCount, setDotCount] = useState(0);
   const navigate = useNavigate();
 
   const baseUrl = import.meta.env.VITE_BASE_URL;
+
+    useEffect(() => {
+    let interval;
+    if (loading) {
+      interval = setInterval(() => {
+        setDotCount(prev => (prev + 1) % 4);
+      }, 500);
+    } else {
+      setDotCount(0);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [loading]);
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
@@ -51,12 +66,16 @@ function TeacherChatInterface() {
           initialExpanded[index] = false;
         });
         setExpandedStudents(initialExpanded);
+
+        setTimeout(()=>{
+          setLoading(false);
+        },2000);
+
       } catch (error) {
         console.error("Error fetching students:", error);
         setStudents([]);
-      } finally {
         setLoading(false);
-      }
+      } 
     };
 
     fetchStudents();
@@ -127,7 +146,32 @@ function TeacherChatInterface() {
   };
 
   if (loading) {
-    return <div className="loading">Loading students...</div>;
+
+    return (
+      <>
+              <div className="pl">
+                <div className="pl__coin">
+                  <div className="pl__coin-flare"></div>
+                  <div className="pl__coin-flare"></div>
+                  <div className="pl__coin-flare"></div>
+                  <div className="pl__coin-flare"></div>
+                  <div className="pl__coin-layers">
+                    <div className="pl__coin-layer">
+                      <div className="pl__coin-inscription"></div>
+                    </div>
+                    <div className="pl__coin-layer"></div>
+                    <div className="pl__coin-layer"></div>
+                    <div className="pl__coin-layer"></div>
+                    <div className="pl__coin-layer">
+                      <div className="pl__coin-inscription"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="pl__shadow"></div>
+                <div className="loading-text">Loading{'.'.repeat(dotCount)}</div>
+              </div>
+            </>
+    );
   }
 
   return (

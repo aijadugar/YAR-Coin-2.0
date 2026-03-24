@@ -60,7 +60,7 @@ export default function HomeHeader() {
 
   const handleDashboardNavigation = () => {
     if (userData?.role === "teacher") {
-      navigate("/teacher-home");
+      navigate("/mentor-dashboard");
     } else {
       navigate("/student/playground");
     }

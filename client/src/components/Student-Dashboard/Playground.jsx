@@ -171,6 +171,8 @@ const Playground = () => {
         ? teachers.find(t => t._id === student.ownedBy)
         : null;
 
+      console.log("Found teacher for", student.name, ':', ownedByTeacher);
+
       const studentNfts = studentNFTs[student.walletAddress] || [];
 
       return {

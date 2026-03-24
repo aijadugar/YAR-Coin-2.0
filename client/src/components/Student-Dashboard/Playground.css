@@ -487,7 +487,7 @@
 
 .teacher-name {
   font-weight: 600;
-  color: #374151;
+  color: black;
 }
 
 .bid-amount {
@@ -500,19 +500,90 @@
   letter-spacing: 0.2px;
 }
 
-/* ─── Acquisition row ─────────────────────────────────────── */
 .row-acquisition {
   grid-column: 1 / -1;
   border-top: 1px solid #f0f1f5;
   padding-top: 0.75rem;
   margin-top: 0.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .acquisition-details {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
+}
+
+.row-acquisition .row-label {
+  margin-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #9ca3af;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+
+.acquisition-details .teacher-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #92400e !important;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  border: 1px solid #fbbf24;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.acquisition-details .teacher-name::before {
+  font-size: 0.75rem;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+}
+
+.acquisition-details .teacher-name:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(251, 191, 36, 0.2);
+  background: linear-gradient(135deg, #fde68a, #fcd34d);
+}
+
+.row-acquisition::after {
+  content: "";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border-radius: 50%;
+  margin-left: auto;
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  .row-acquisition {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .row-acquisition::after {
+    margin-left: 0;
+    margin-top: 0.25rem;
+  }
+  
+  .acquisition-details .teacher-name {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.85rem;
+  }
 }
 
 .acquisition-value {
@@ -655,8 +726,7 @@
   }
 
   .row-nfts,
-  .row-bids,
-  .row-acquisition {
+  .row-bids{
     grid-column: 1 / -1;
   }
 }

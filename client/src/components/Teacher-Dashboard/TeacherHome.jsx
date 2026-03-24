@@ -55,8 +55,11 @@ useEffect(() => {
         allStudents.map(async (s) => {
           if (!s.walletAddress) return null;
 
+          const baseUrl = import.meta.env.VITE_BASE_URL;
+
+
           const response = await fetch(
-            "https://automatic-space-spoon-7vqpjr79p4qqcp4vx-5000.app.github.dev/api/biddings/bids",
+            `${baseUrl}/api/biddings/bids`,
             {
               method: "POST",
               headers: {

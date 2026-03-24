@@ -8,14 +8,29 @@ const NFTHistory = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [copiedTx, setCopiedTx] = useState(null); // Track which tx hash was copied
+  const [dotCount, setDotCount] = useState(0);
 
   const walletAddress = localStorage.getItem("walletAddress");
+
+  useEffect(() => {
+    let interval;
+    if (loading) {
+      interval = setInterval(() => {
+        setDotCount(prev => (prev + 1) % 4);
+      }, 500);
+    } else {
+      setDotCount(0);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [loading]);
 
   useEffect(() => {
     const fetchHistory = async () => {
       if (!walletAddress) {
         setError("Wallet not found. Please login again.");
-        setLoading(false);
+        setTimeout(() => setLoading(false), 2000);
         return;
       }
 
@@ -29,16 +44,15 @@ const NFTHistory = () => {
           throw new Error("Failed to fetch nft history");
         }
 
-        // Backend now returns { success, count, nfts }
         setHistory(data.nfts || []);
         setTotalNFT(data.count || 0);
+        setTimeout(() => setLoading(false), 2000);
 
       } catch (err) {
         console.error("Fetch Error:", err);
         setError("Unable to load NFT history");
-      } finally {
-        setLoading(false);
-      }
+        setTimeout(() => setLoading(false), 2000);
+      } 
     };
 
     fetchHistory();
@@ -74,7 +88,29 @@ const NFTHistory = () => {
   };
 
   if (loading) {
-    return <div className="nft-history-loading">Loading...</div>;
+    return (
+      <div className="pl">
+        <div className="pl__coin">
+          <div className="pl__coin-flare"></div>
+          <div className="pl__coin-flare"></div>
+          <div className="pl__coin-flare"></div>
+          <div className="pl__coin-flare"></div>
+          <div className="pl__coin-layers">
+            <div className="pl__coin-layer">
+              <div className="pl__coin-inscription"></div>
+            </div>
+            <div className="pl__coin-layer"></div>
+            <div className="pl__coin-layer"></div>
+            <div className="pl__coin-layer"></div>
+            <div className="pl__coin-layer">
+              <div className="pl__coin-inscription"></div>
+            </div>
+          </div>
+        </div>
+        <div className="pl__shadow"></div>
+        <div className="loading-text">Loading{'.'.repeat(dotCount)}</div>
+      </div>
+    );
   }
 
   if (error) {

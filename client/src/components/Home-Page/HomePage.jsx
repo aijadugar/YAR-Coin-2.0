@@ -44,7 +44,7 @@ export default function HomePage() {
     
     if (isLoggedIn) {
       if (role === "teacher") {
-        navigate("/teacher-home");
+        navigate("/mentor-dashboard");
       } else {
         navigate("/student/playground");
       }

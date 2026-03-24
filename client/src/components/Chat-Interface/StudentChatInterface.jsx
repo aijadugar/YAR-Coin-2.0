@@ -10,7 +10,22 @@ function StudentChatInterface() {
   const [teamMembers, setTeamMembers] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [dotCount, setDotCount] = useState(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+      let interval;
+      if (loading) {
+        interval = setInterval(() => {
+          setDotCount(prev => (prev + 1) % 4);
+        }, 500);
+      } else {
+        setDotCount(0);
+      }
+      return () => {
+        if (interval) clearInterval(interval);
+      };
+    }, [loading]);
 
   const baseUrl = import.meta.env.VITE_BASE_URL;
   useEffect(() => {
@@ -47,7 +62,9 @@ function StudentChatInterface() {
         const teacherId = currentStudent.ownedBy;
         if (!teacherId) {
           setTeamMembers([{ name: "No mentor assigned yet", role: "System" }]);
+          setTimeout(() => {
           setLoading(false);
+          }, 2000);
           return;
         }
 
@@ -67,12 +84,18 @@ function StudentChatInterface() {
           ...teamStudents.map((s) => ({ name: s.name, role: "Candidate", _id: s._id })),
         ];
         setTeamMembers(members);
+
+        setTimeout(()=>{
+          setLoading(false);
+        },2000);
+
       } catch (error) {
         console.error("Error fetching team members:", error);
         setTeamMembers([{ name: "Error loading team", role: "" }]);
-      } finally {
+        setTimeout(() => {
         setLoading(false);
-      }
+        },2000);
+      } 
     };
 
     fetchTeam();
@@ -131,7 +154,29 @@ function StudentChatInterface() {
   };
 
   if (loading) {
-    return <div className="loading">Loading team...</div>;
+    return(
+      <div className="pl">
+        <div className="pl__coin">
+          <div className="pl__coin-flare"></div>
+          <div className="pl__coin-flare"></div>
+          <div className="pl__coin-flare"></div>
+          <div className="pl__coin-flare"></div>
+          <div className="pl__coin-layers">
+            <div className="pl__coin-layer">
+              <div className="pl__coin-inscription"></div>
+            </div>
+            <div className="pl__coin-layer"></div>
+            <div className="pl__coin-layer"></div>
+            <div className="pl__coin-layer"></div>
+            <div className="pl__coin-layer">
+              <div className="pl__coin-inscription"></div>
+            </div>
+          </div>
+        </div>
+        <div className="pl__shadow"></div>
+        <div className="loading-text">Loading{'.'.repeat(dotCount)}</div>
+      </div>
+    );
   }
 
   return (
