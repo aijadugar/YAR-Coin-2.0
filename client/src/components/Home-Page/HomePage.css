@@ -889,35 +889,35 @@ span.teacher-name {
   transform: translateX(5px);
 }
 
-.contract-box{
-  padding:14px 18px;
-  width:65%;
-  display: inline-block;
+.contract-box {
+  padding: 14px 18px;
+  width: 50%;
   border-radius: 10px;
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(6px);
-  border:1px solid rgba(255,255,255,0.15); 
+  border: 1px solid rgba(255,255,255,0.15);
 }
 
-.contract-title{
-  font-size:14px;
-  color: white;
-  margin-bottom: 6px;
-  font-weight:500;
-}
-
-.contract-address-row{
-  display:flex;
+.contract-row {
+  display: flex;
   align-items: center;
-  gap:10px;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 
-#contractAddress {
+.contract-name {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.contract-address {
   font-family: monospace;
-  font-size: 15px;
-  color: #ffffff;
+  font-size: 14px;
+  color: #fff;
   background: rgba(0,0,0,0.25);
-  padding: 6px 10px;
+  padding: 5px 8px;
   border-radius: 6px;
 }
 
