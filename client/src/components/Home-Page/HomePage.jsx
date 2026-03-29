@@ -22,26 +22,41 @@ import {
   FaRocket as FaRocketIcon
 } from "react-icons/fa";
 import "./HomePage.css";
-import HomeNavbar from "../Navbar/HomeNavbar"; 
+import HomeNavbar from "../Navbar/HomeNavbar";
 
 export default function HomePage() {
   const [loggedInUser, setLoggedInUser] = useState("");
-  const [userRole, setUserRole] = useState(""); 
-  const [copied, setCopied] = useState(false); 
+  const [userRole, setUserRole] = useState("");
+  const [copied, setCopied] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const userName = localStorage.getItem("userName") || localStorage.getItem("username") || "";
-    const role = localStorage.getItem("userRole") || ""; 
+    const role = localStorage.getItem("userRole") || "";
     setLoggedInUser(userName);
-    setUserRole(role); 
+    setUserRole(role);
   }, [location]);
+
+  const contracts = [
+    {
+      name: "YARCoin Token (Sepolia)",
+      address: "0x42861CE1c5A357EdE7bd0CAe9A14B1AC95E56061"
+    },
+    {
+      name: "YARCoin NFT",
+      address: "0x17cdEe7E0498F2Cfe410f5767589426ce0F8d8c0"
+    },
+    {
+      name: "YARCoin DEX",
+      address: "0xc58C2e87d00118e9988fE307980A2d82812DEE6c"
+    }
+  ];
 
   const handleEnterPlayground = () => {
     const isLoggedIn = localStorage.getItem("userEmail");
-    const role = localStorage.getItem("userRole"); 
-    
+    const role = localStorage.getItem("userRole");
+
     if (isLoggedIn) {
       if (role === "teacher") {
         navigate("/mentor-dashboard");
@@ -60,12 +75,12 @@ export default function HomePage() {
     }
   };
 
-    const handleCopy = () => {
-    const address = document.getElementById("contractAddress").innerText;
+  const handleCopy = (address, index) => {
     navigator.clipboard.writeText(address);
-    setCopied(true);
+    setCopied(index);
+
     setTimeout(() => {
-      setCopied(false);
+      setCopied(null);
     }, 2000);
   };
 
@@ -76,8 +91,8 @@ export default function HomePage() {
 
   return (
     <div className="home-page">
-      <HomeNavbar /> 
-      
+      <HomeNavbar />
+
       <main className="home-main">
         <section className="hero-section" id="hero">
           <div className="hero-container">
@@ -89,37 +104,40 @@ export default function HomePage() {
               </div>
 
               <div className="contract-box">
-                <div className="contract-title">
-                  YARCoin Token Contract (Sepolia Testnet)
-                </div>
+                {contracts.map((contract, index) => (
+                  <div key={index} className="contract-row">
 
-                <div className="contract-address-row">
-                  <span id="contractAddress">
-                    0x42861CE1c5A357EdE7bd0CAe9A14B1AC95E56061
-                  </span>
+                    <span className="contract-name">
+                      {contract.name}:
+                    </span>
 
-                  <button 
-                  id="copyBtn" 
-                  className={`copy-btn-homepage ${copied ? 'copied' : ''}`} onClick={handleCopy}>  
+                    <span className="contract-address">
+                      {contract.address.slice(0, 6)}...{contract.address.slice(-5)}
+                    </span>
 
-                  {copied ? (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M20 6L9 17L4 12" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  ) : (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                      <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
-                    </svg>
-                  )}
-                  </button>
-                
-                </div>
+                    <button
+                      className={`copy-btn-homepage ${copied === index ? 'copied' : ''}`}
+                      onClick={() => handleCopy(contract.address, index)}
+                    >
+                      {copied === index ? (
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M20 6L9 17L4 12" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      ) : (
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                        </svg>
+                      )}
+                    </button>
+
+                  </div>
+                ))}
               </div>
 
 
               <h1 className="hero-title">
-                Discover Your <span className="gradient-text">Potential</span> in the 
+                Discover Your <span className="gradient-text">Potential</span> in the
                 <span className="highlight"> Learning Playground</span>
               </h1>
 
@@ -146,7 +164,7 @@ export default function HomePage() {
                 </button>
               </div>
 
-              
+
 
               <div className="hero-stats">
                 <div className="stat-item">
@@ -316,7 +334,7 @@ export default function HomePage() {
                     viewBox="0 0 600 300"
                     preserveAspectRatio="none"
                   >
-                    
+
                     <g className="chart-grid">
                       <line x1="80" y1="50" x2="580" y2="50" />
                       <line x1="80" y1="120" x2="580" y2="120" />
@@ -346,14 +364,14 @@ export default function HomePage() {
                       fill="none"
                       className="chart-line"
                     />
-                    
+
                     {/* Gradient fill under the line */}
                     <path
                       d="M80 240 C150 220, 200 210, 250 200 S350 170, 400 160 S500 120, 580 100 L580 260 L80 260 Z"
                       fill="url(#chart-gradient)"
                       opacity="0.2"
                     />
-                    
+
                     {/* Define gradient */}
                     <defs>
                       <linearGradient id="chart-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -372,7 +390,7 @@ export default function HomePage() {
           <div className="features-container">
             <h2 className="section-title">Why Join Our Platform?</h2>
             <p className="section-subtitle">Experience the future of talent recognition and mentorship</p>
-            
+
             <div className="features-grid">
               <div className="feature-card">
                 <div className="feature-icon-container">
@@ -435,7 +453,7 @@ export default function HomePage() {
           <div className="how-it-works-container">
             <h2 className="section-title">How It Works</h2>
             <p className="section-subtitle">Simple steps to start your journey</p>
-            
+
             <div className="steps-container">
               <div className="step-item">
                 <div className="step-number">1</div>
@@ -444,7 +462,7 @@ export default function HomePage() {
                   <p>Sign up as a candidate or mentor and showcase your skills, achievements, and expertise.</p>
                 </div>
               </div>
-              
+
               <div className="step-item">
                 <div className="step-number">2</div>
                 <div className="step-content">
@@ -452,7 +470,7 @@ export default function HomePage() {
                   <p>Browse candidate profiles, place bids, or receive bids from interested mentors.</p>
                 </div>
               </div>
-              
+
               <div className="step-item">
                 <div className="step-number">3</div>
                 <div className="step-content">
@@ -494,7 +512,7 @@ export default function HomePage() {
                 </a>
               </div>
             </div>
-            
+
             <div className="footer-links">
               <h4>Quick Links</h4>
               <ul>
@@ -504,7 +522,7 @@ export default function HomePage() {
                 <li><a href="#about">About Us</a></li>
               </ul>
             </div>
-            
+
             <div className="footer-links">
               <h4>Legal</h4>
               <ul>
@@ -513,17 +531,19 @@ export default function HomePage() {
                 <li><a href="#">Cookie Policy</a></li>
               </ul>
             </div>
-            
+
             <div className="footer-newsletter">
               <h4>Stay Updated</h4>
               <p>Subscribe to our newsletter</p>
               <div className="newsletter-form">
                 <input type="email" placeholder="Enter your email" />
-                <button>Subscribe</button>
+                <a href="https://yarcoin-auction.bolt.host/" target="_blank" rel="noopener noreferrer">
+                  <button>Subscribe</button>
+                </a>
               </div>
             </div>
           </div>
-          
+
           <div className="footer-bottom">
             <p>© 2026 YARCoin. All rights reserved. Made with <FaHeart className="heart-icon" /> for education</p>
           </div>
