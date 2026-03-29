@@ -7,8 +7,22 @@ const PenaltyHistory = () => {
   const [totalPenalty, setTotalPenalty] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const [dotCount, setDotCount] = useState(0);
   const walletAddress = localStorage.getItem("walletAddress");
+
+  useEffect(() => {
+    let interval;
+    if (loading) {
+      interval = setInterval(() => {
+        setDotCount(prev => (prev + 1) % 4);
+      }, 500);
+    } else {
+      setDotCount(0);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [loading]);
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -33,13 +47,13 @@ const PenaltyHistory = () => {
 
         setHistory(data.history || []);
         setTotalPenalty(data.totalPanelty || 0);
+        setTimeout(() => setLoading(false), 2000);
 
       } catch (err) {
         console.error("Fetch Error:", err);
         setError("Unable to load penalty history");
-      } finally {
-        setLoading(false);
-      }
+        setTimeout(()=> setLoading(false), 2000);
+      } 
     };
 
     fetchHistory();
@@ -50,7 +64,29 @@ const PenaltyHistory = () => {
   };
 
   if (loading) {
-    return <div className="penalty-history-loading">Loading...</div>;
+    return (
+      <div className="pl">
+        <div className="pl__coin">
+          <div className="pl__coin-flare"></div>
+          <div className="pl__coin-flare"></div>
+          <div className="pl__coin-flare"></div>
+          <div className="pl__coin-flare"></div>
+          <div className="pl__coin-layers">
+            <div className="pl__coin-layer">
+              <div className="pl__coin-inscription"></div>
+            </div>
+            <div className="pl__coin-layer"></div>
+            <div className="pl__coin-layer"></div>
+            <div className="pl__coin-layer"></div>
+            <div className="pl__coin-layer">
+              <div className="pl__coin-inscription"></div>
+            </div>
+          </div>
+        </div>
+        <div className="pl__shadow"></div>
+        <div className="loading-text">Loading{'.'.repeat(dotCount)}</div>
+      </div>
+    );
   }
 
   if (error) {

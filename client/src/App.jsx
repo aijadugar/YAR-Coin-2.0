@@ -18,7 +18,7 @@ function App() {
       <Routes>
         <Route path="/auth" element={<Auth/>} />
         <Route path="/" element={<HomePage/>} />
-        <Route path="/teacher-home" element={<TeacherHome />} />
+        <Route path="/mentor-dashboard" element={<TeacherHome />} />
         <Route path="/student/playground" element={<Playground/>} />
         <Route path="/student-workspace" element={<StudentChatInterface />} />
         <Route path="/teacher-workspace" element={<TeacherChatInterface />} />

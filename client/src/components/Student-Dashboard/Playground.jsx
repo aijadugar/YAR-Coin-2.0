@@ -171,6 +171,8 @@ const Playground = () => {
         ? teachers.find(t => t._id === student.ownedBy)
         : null;
 
+      console.log("Found teacher for", student.name, ':', ownedByTeacher);
+
       const studentNfts = studentNFTs[student.walletAddress] || [];
 
       return {
@@ -334,7 +336,7 @@ const Playground = () => {
           <div className="students-list">
             {paginatedStudents.length === 0 ? (
               <div className="no-students">
-                <p>No students found{searchQuery ? ` matching "${searchQuery}"` : ''}.</p>
+                <p>No candidates found{searchQuery ? ` matching "${searchQuery}"` : ''}.</p>
               </div>
             ) : (
               paginatedStudents.map(student => (

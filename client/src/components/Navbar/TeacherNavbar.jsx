@@ -73,7 +73,7 @@ export default function TeacherNavbar({
 
           {profileOpen && (
             <div className="teacher-profile-dropdown">
-              <h3>Teacher Profile</h3>
+              <h3>Mentor Profile</h3>
 
               <div className="teacher-profile-item">
                 <span>Name:</span>

@@ -275,7 +275,7 @@ export default function Auth() {
     // 4. Redirect
     setTimeout(() => {
       if (userRole === "teacher") {
-        navigate("/teacher-home", {
+        navigate("/mentor-dashboard", {
           state: { ...user, role: "teacher" }
         });
       } else {
