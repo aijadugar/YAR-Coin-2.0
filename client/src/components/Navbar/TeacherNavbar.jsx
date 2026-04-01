@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./TeacherNavbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function TeacherNavbar({ 
   onLogout, 
@@ -9,6 +9,7 @@ export default function TeacherNavbar({
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const navigate = useNavigate();
   const profileRef = useRef();
 
   const storedTeacher = currentTeacher;
@@ -42,8 +43,10 @@ export default function TeacherNavbar({
     return (
       <nav className="teacher-navbar">
         <div className="teacher-navbar-brand">
-          <span className="teacher-logo-text">YARCoin</span>
-          <span className="teacher-logo-badge">Learn & Earn</span>
+          <div className="navbar-logo-container" onClick={() => navigate("/")}>
+          <span className="logo-text">YARCoin</span>
+          <span className="logo-badge">Learn & Earn</span>
+        </div>
         </div>
       </nav>
     );
@@ -52,8 +55,10 @@ export default function TeacherNavbar({
   return (
     <nav className="teacher-navbar">
       <div className="teacher-navbar-brand">
-        <span className="teacher-logo-text">YARCoin</span>
-          <span className="teacher-logo-badge">Learn & Earn</span>
+        <div className="navbar-logo-container" onClick={() => navigate("/")}>
+          <span className="logo-text">YARCoin</span>
+          <span className="logo-badge">Learn & Earn</span>
+        </div>
         <button 
           className="mobile-menu-btn"
           onClick={toggleMobileMenu}

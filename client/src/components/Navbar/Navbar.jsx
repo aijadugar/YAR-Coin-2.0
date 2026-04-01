@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import {
   FaUser,
 } from "react-icons/fa";
@@ -14,6 +14,7 @@ export default function Navbar({
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const navigate = useNavigate();
   const profileRef = useRef();
 
   const storedUser = currentStudent;
@@ -48,9 +49,9 @@ export default function Navbar({
     return (
       <nav className="navbar">
         <div className="navbar-brand">
-          <div className="navbar-logo-container">
-          <span className="navbar-logo-text">YARCoin</span>
-          <span className="navbar-logo-badge">Learn & Earn</span>
+        <div className="navbar-logo-container" onClick={() => navigate("/")}>
+          <span className="logo-text">YARCoin</span>
+          <span className="logo-badge">Learn & Earn</span>
         </div>
         </div>
       </nav>
@@ -60,9 +61,9 @@ export default function Navbar({
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <div className="navbar-logo-container">
-          <span className="navbar-logo-text">YARCoin</span>
-          <span className="navbar-logo-badge">Learn & Earn</span>
+        <div className="navbar-logo-container" onClick={() => navigate("/")}>
+          <span className="logo-text">YARCoin</span>
+          <span className="logo-badge">Learn & Earn</span>
         </div>
         <button 
           className="mobile-menu-btn"

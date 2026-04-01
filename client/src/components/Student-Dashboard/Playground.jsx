@@ -229,7 +229,6 @@ const Playground = () => {
             nftData[student.walletAddress] = [];
           }
         } catch (nftError) {
-          // Use the error for logging but not storing
           console.error(`Error fetching NFTs for student ${student.walletAddress}:`, nftError);
           nftData[student.walletAddress] = [];
         }
@@ -392,8 +391,7 @@ const Playground = () => {
                               <div key={nft._id || index} className="nft-item">
                                 <div className="nft-badge">
                                   <span className="nft-icon"><IconComponent /></span>
-                                  <span className="nft-title">{nft.title}</span>
-                                  <span className="nft-tooltip">{nft.description}</span>
+                                  <span className="nft-tooltip">{nft.title}</span>
                                 </div>
                               </div>
                             );
